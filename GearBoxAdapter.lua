@@ -1,0 +1,1 @@
+MOD_DIRECTORY = g_currentModDirectory

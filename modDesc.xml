@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<modDesc descVersion="101">
+  <author>Farmsim Tim (timmeey86)</author>
+  <version>0.1.0.0</version>
+  <title>
+    <en>Gearbox Adapter</en>
+  </title>
+  <description>
+    <en><![CDATA[Gearbox Adapter]]></en>
+  </description>
+  <multiplayer supported="true" />
+  <iconFilename>icon_GearboxAdapter.dds</iconFilename>
+  <extraSourceFiles>
+    <sourceFile filename="GearboxAdapter.lua" />
+  </extraSourceFiles>
+  <specializations>
+    <specialization name="gearInputAdapter" className="GearInputAdapterSpec" filename="input/GearInputAdapterSpec.lua" />
+  </specializations>
+  <inputBinding>
+    <actionBinding action="GA_CUSTOM_STATE_1">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_1" />
+    </actionBinding>
+    <actionBinding action="GA_CUSTOM_STATE_2">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_2" />
+    </actionBinding>
+    <actionBinding action="GA_CUSTOM_STATE_3">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_3" />
+    </actionBinding>
+    <actionBinding action="GA_CUSTOM_STATE_4">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_4" />
+    </actionBinding>
+  </inputBinding>
+  <actions>
+    <action name="GA_CUSTOM_STATE_1" />
+    <action name="GA_CUSTOM_STATE_2" />
+    <action name="GA_CUSTOM_STATE_3" />
+    <action name="GA_CUSTOM_STATE_4" />
+  </actions>
+  <l10n>
+    <text name="input_GA_CUSTOM_STATE_1">
+      <en>State 1</en>
+    </text>
+    <text name="input_GA_CUSTOM_STATE_1">
+      <en>State 2</en>
+    </text>
+    <text name="input_GA_CUSTOM_STATE_1">
+      <en>State 3</en>
+    </text>
+    <text name="input_GA_CUSTOM_STATE_1">
+      <en>State 4</en>
+    </text>
+  </l10n>
+</modDesc>
