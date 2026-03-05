@@ -11,43 +11,119 @@
   <multiplayer supported="true" />
   <iconFilename>icon_GearboxAdapter.dds</iconFilename>
   <extraSourceFiles>
+    <!--Generic domain code-->
+    <sourceFile filename="domain/incoming/GearboxAdapterInterface.lua" />
+    <sourceFile filename="domain/outgoing/GearChangeInterface.lua" />
+    <sourceFile filename="domain/core/InputTransformationStrategy.lua" />
+    <sourceFile filename="domain/core/strategy/SequentialTransformationStrategy.lua" />
+    <sourceFile filename="domain/core/DomainGearboxAdapter.lua" />
+    <!--FS25 specific-->
+    <sourceFile filename="output/GearChangeHandler.lua" />
     <sourceFile filename="GearboxAdapter.lua" />
   </extraSourceFiles>
   <specializations>
     <specialization name="gearInputAdapter" className="GearInputAdapterSpec" filename="input/GearInputAdapterSpec.lua" />
   </specializations>
   <inputBinding>
-    <actionBinding action="GA_CUSTOM_STATE_1">
+    <actionBinding action="GA_GEAR_GROUP_STATE_1">
       <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_1" />
     </actionBinding>
-    <actionBinding action="GA_CUSTOM_STATE_2">
+    <actionBinding action="GA_GEAR_GROUP_STATE_2">
       <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_2" />
     </actionBinding>
-    <actionBinding action="GA_CUSTOM_STATE_3">
+    <actionBinding action="GA_GEAR_GROUP_STATE_3">
       <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_3" />
     </actionBinding>
-    <actionBinding action="GA_CUSTOM_STATE_4">
+    <actionBinding action="GA_GEAR_GROUP_STATE_4">
       <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_4" />
     </actionBinding>
+    <actionBinding action="GA_GEAR_GROUP_STATE_5">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_5" />
+    </actionBinding>
+    <actionBinding action="GA_GEAR_GROUP_STATE_6">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_6" />
+    </actionBinding>
+    <actionBinding action="GA_GEAR_GROUP_STATE_7">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_7" />
+    </actionBinding>
+    <actionBinding action="GA_GEAR_GROUP_STATE_8">
+      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_8" />
+    </actionBinding>
+    <actionBinding action="GA_GEAR_STATE_1" />
+    <actionBinding action="GA_GEAR_STATE_2" />
+    <actionBinding action="GA_GEAR_STATE_3" />
+    <actionBinding action="GA_GEAR_STATE_4" />
+    <actionBinding action="GA_GEAR_STATE_5" />
+    <actionBinding action="GA_GEAR_STATE_6" />
+    <actionBinding action="GA_GEAR_STATE_7" />
+    <actionBinding action="GA_GEAR_STATE_8" />
   </inputBinding>
   <actions>
-    <action name="GA_CUSTOM_STATE_1" />
-    <action name="GA_CUSTOM_STATE_2" />
-    <action name="GA_CUSTOM_STATE_3" />
-    <action name="GA_CUSTOM_STATE_4" />
+    <action name="GA_GEAR_GROUP_STATE_1" />
+    <action name="GA_GEAR_GROUP_STATE_2" />
+    <action name="GA_GEAR_GROUP_STATE_3" />
+    <action name="GA_GEAR_GROUP_STATE_4" />
+    <action name="GA_GEAR_GROUP_STATE_5" />
+    <action name="GA_GEAR_GROUP_STATE_6" />
+    <action name="GA_GEAR_GROUP_STATE_7" />
+    <action name="GA_GEAR_GROUP_STATE_8" />
+    <action name="GA_GEAR_STATE_1" />
+    <action name="GA_GEAR_STATE_2" />
+    <action name="GA_GEAR_STATE_3" />
+    <action name="GA_GEAR_STATE_4" />
+    <action name="GA_GEAR_STATE_5" />
+    <action name="GA_GEAR_STATE_6" />
+    <action name="GA_GEAR_STATE_7" />
+    <action name="GA_GEAR_STATE_8" />
   </actions>
   <l10n>
-    <text name="input_GA_CUSTOM_STATE_1">
-      <en>State 1</en>
+    <text name="input_GA_GEAR_GROUP_STATE_1">
+      <en>Gear Group State 1</en>
     </text>
-    <text name="input_GA_CUSTOM_STATE_1">
-      <en>State 2</en>
+    <text name="input_GA_GEAR_GROUP_STATE_2">
+      <en>Gear Group State 2</en>
     </text>
-    <text name="input_GA_CUSTOM_STATE_1">
-      <en>State 3</en>
+    <text name="input_GA_GEAR_GROUP_STATE_3">
+      <en>Gear Group State 3</en>
     </text>
-    <text name="input_GA_CUSTOM_STATE_1">
-      <en>State 4</en>
+    <text name="input_GA_GEAR_GROUP_STATE_4">
+      <en>Gear Group State 4</en>
+    </text>
+    <text name="input_GA_GEAR_GROUP_STATE_5">
+      <en>Gear Group State 5</en>
+    </text>
+    <text name="input_GA_GEAR_GROUP_STATE_6">
+      <en>Gear Group State 6</en>
+    </text>
+    <text name="input_GA_GEAR_GROUP_STATE_7">
+      <en>Gear Group State 7</en>
+    </text>
+    <text name="input_GA_GEAR_GROUP_STATE_8">
+      <en>Gear Group State 8</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_1">
+      <en>Gear State 1</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_2">
+      <en>Gear State 2</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_3">
+      <en>Gear State 3</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_4">
+      <en>Gear State 4</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_5">
+      <en>Gear State 5</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_6">
+      <en>Gear State 6</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_7">
+      <en>Gear State 7</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_8">
+      <en>Gear State 8</en>
     </text>
   </l10n>
 </modDesc>
