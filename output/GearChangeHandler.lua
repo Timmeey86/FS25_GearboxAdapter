@@ -31,6 +31,12 @@ function GearChangeHandler:changeGroupAndGear(group, gear)
 	end
 
 	Logging.info("FS25 Adapter: Changing group and gear to %s and %s", group, gear)
-	motor:setGearGroup(group, false)
-	motor:setGear(gear)
+	if group then
+		motor:setGearGroup(group, false)
+	-- else: don't change group
+	end
+
+	-- TODO: Use VehicleMotor:changeDirection or something so the vehicle doesn't instantly turn around
+	motor.currentDirection = motor.directionChangeUseGear and (gear >= 0 and 1 or -1) or 1
+	motor:setGear(gear < 0 and -gear or gear)
 end

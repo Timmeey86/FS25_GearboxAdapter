@@ -8,7 +8,8 @@ local gearChangeHandler = GearChangeHandler.new()
 local gearboxAdapter = DomainGearboxAdapter.new(gearChangeHandler, isClutchEnabledFunc)
 
 -- For now, use a fixed configuration
-gearboxAdapter:setTransformationStrategy(GearboxAdapterInterface.STRATEGY.EATON_FULLER_18)
+gearboxAdapter:setInputTransformationStrategy(GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18)
+gearboxAdapter:setOutputTransformationStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
 gearboxAdapter:setInputLimits(4, 6)
 gearboxAdapter:setCurrentGearLayout(3, 4) -- depends on vehicle
 

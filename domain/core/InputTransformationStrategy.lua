@@ -1,34 +1,30 @@
----An internal interface for transformation strategies
+---An internal interface for interpreting controller inputs based on the player's choice.
 ---@class InputTransformationStrategy
 InputTransformationStrategy = {}
 
----Registers a new vehicle gear/group layout to be processed from now on
----@param groupCount number @The number of gear groups in the vehicle.
----@param gearCount number @The number of gears per group in the vehicle.
----@param totalGearCount number @The total number of gears in the vehicle. Usually maxGroups * maxGears, but might be lower if e.g. some vehicle has less gears in the last group or something.
-function InputTransformationStrategy:changeVehicle(groupCount, gearCount, totalGearCount)
-	error("Method 'changeVehicle' not defined in implementing class")
-end
-
----Sets the number of gear groups and gears the player can select with their controller.
+---Sets the number of gear groups and gears the player can select with their controller. Note that some input strategies might ignore this. It is mainly meant for those which e.g. support 6 and 8 gear shifters for groups and/or gears.
 ---@param maxGroups number @The number of gear groups the player can select with their controller.
 ---@param maxGears number @The number of gears per gear group the player can select with their controller.
----@param totalGearCount number @The total number of gears the player can select with their controller. Usually maxGroups * maxGears.
-function InputTransformationStrategy:setInputLimits(maxGroups, maxGears, totalGearCount)
+function InputTransformationStrategy:setInputLimits(maxGroups, maxGears)
 	error("Method 'setInputLimits' not defined in implementing class")
 end
 
----Transforms the generic gear group and gear inputs into a gear selection.
----@param groupInput number @The gear group which was selected.
----@param gearInput number @The gear input which was selected.
----@return number, number @The transformed group and gear to select in the vehicle. The group will be nil if the vehicle doesn't support groups.
-function InputTransformationStrategy:transformGearInput(groupInput, gearInput)
-	error("Method 'transformGearInput' not defined in implementing class")
-	return 1, 1
+---Sets the given gear group active.
+---@param newGroup number @The group which was selected by the input controller
+function InputTransformationStrategy:changeGearGroup(newGroup)
+	error("Method 'changeGearGroup' not defined in implementing class")
+	-- Note: When implementing, ask for the OutputTransformationStrategy in the constructor and call methods on it in the implementation if necessary.
 end
 
----Tells the strategy that the clutch was pressed.
+---Sets the given gear active.
+function InputTransformationStrategy:changeGear(newGear)
+	error("Method 'changeGear' not defined in implementing class")
+	-- Note: When implementing, ask for the OutputTransformationStrategy in the constructor and call methods on it in the implementation if necessary.
+end
+
+---Tells the strategy that the clutch's pressed state has changed. This allows things like pre-queuing gear changes for some input strategies.
 ---@param isPressed boolean @True if the clutch is pressed, false otherwise.
 function InputTransformationStrategy:setClutchPressed(isPressed)
 	error("Method 'setClutchPressed' not defined in implementing class")
+	-- Note: When implementing, ask for the OutputTransformationStrategy in the constructor and call methods on it in the implementation if necessary.
 end

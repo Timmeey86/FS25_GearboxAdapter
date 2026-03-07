@@ -1,29 +1,39 @@
 ---This is the public interface of the domain core
 ---@class GearboxAdapterInterface
 GearboxAdapterInterface = {
-	STRATEGY = {
-		SEQUENTIAL = "sequential",
+	INPUT_STRATEGY = {
 		EATON_FULLER_18 = "eatonFuller18"
+	},
+	OUTPUT_STRATEGY = {
+		SEQUENTIAL = "sequential"
 	}
 }
 
 ---Sets the input transformation strategy to be used.
 ---@param strategy string the identifier of the strategy to be used.
-function GearboxAdapterInterface:setTransformationStrategy(strategy)
-	error("Method 'setTransformationStrategy' not defined in implementing class")
+function GearboxAdapterInterface:setInputTransformationStrategy(strategy)
+	error("Method 'setInputTransformationStrategy' not defined in implementing class")
+end
+
+---Sets the output transformation strategy to be used.
+---@param strategy string the identifier of the strategy to be used.
+function GearboxAdapterInterface:setOutputTransformationStrategy(strategy)
+	error("Method 'setOutputTransformationStrategy' not defined in implementing class")
 end
 
 ---Tells the domain core how many gear groups and gears per gear group the vehicle has. Supply nil to both parameters when leaving a vehicle
 ---@param groupCount number|nil @The number of gear groups the vehicle has
----@param gearCount number|nil @The number of gears per gear group the vehicle has. If groupCount is nil, 0 or 1, this is the total number of gears.
-function GearboxAdapterInterface:setCurrentGearLayout(groupCount, gearCount)
+---@param forwardGearCount number|nil @The number of gears per gear group the vehicle has. If groupCount is nil, 0 or 1, this is the total number of gears.
+---@param reverseGearCount number|nil @The number of reverse gears the vehicle has.
+function GearboxAdapterInterface:setCurrentGearLayout(groupCount, forwardGearCount, reverseGearCount)
 	error("Method 'setCurrentGearLayout' not defined in implementing class")
 end
 
 ---Tells the domain core how many gears and groups the player can select
 ---@param maxGroups number @The number of gear groups the player can select with their controller.
----@param maxGears number @The number of gears per gear group the player can select with their controller.
-function GearboxAdapterInterface:setInputLimits(maxGroups, maxGears)
+---@param maxForwardGears number @The number of forward gears the player can select with their controller.
+---@param maxReverseGears number @The number of reverse gears the player can select with their controller.
+function GearboxAdapterInterface:setInputLimits(maxGroups, maxForwardGears, maxReverseGears)
 	error("Method 'setInputLimits' not defined in implementing class")
 end
 

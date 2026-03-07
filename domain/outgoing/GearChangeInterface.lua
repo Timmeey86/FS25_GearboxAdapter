@@ -3,7 +3,7 @@
 GearChangeInterface = {}
 
 ---Selects the given group and gear
----@param group number @The gear group to select (if applicable).
+---@param group number|nil @The gear group to select (if applicable). Nil means "don't change the gear group".
 ---@param gear number @The gear to select within the given gear group
 function GearChangeInterface:changeGroupAndGear(group, gear)
 	error("Method 'changeGroupAndGear' not defined in implementing class")

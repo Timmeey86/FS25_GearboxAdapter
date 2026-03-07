@@ -14,9 +14,11 @@
     <!--Generic domain code-->
     <sourceFile filename="domain/incoming/GearboxAdapterInterface.lua" />
     <sourceFile filename="domain/outgoing/GearChangeInterface.lua" />
+    <sourceFile filename="domain/core/GearSelectionData.lua" />
     <sourceFile filename="domain/core/InputTransformationStrategy.lua" />
-    <sourceFile filename="domain/core/strategy/SequentialTransformationStrategy.lua" />
-    <sourceFile filename="domain/core/strategy/EatonFuller18TransformationStrategy.lua" />
+    <sourceFile filename="domain/core/OutputTransformationStrategy.lua" />
+    <sourceFile filename="domain/core/outputStrategy/SequentialOutputStrategy.lua" />
+    <sourceFile filename="domain/core/inputStrategy/EatonFuller18InputStrategy.lua" />
     <sourceFile filename="domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
     <sourceFile filename="output/GearChangeHandler.lua" />
@@ -58,6 +60,8 @@
     <actionBinding action="GA_GEAR_STATE_6" />
     <actionBinding action="GA_GEAR_STATE_7" />
     <actionBinding action="GA_GEAR_STATE_8" />
+    <actionBinding action="GA_GEAR_STATE_R" />
+    <actionBinding action="GA_GEAR_STATE_N" />
   </inputBinding>
   <actions>
     <action name="GA_GEAR_GROUP_STATE_1" />
@@ -76,6 +80,8 @@
     <action name="GA_GEAR_STATE_6" />
     <action name="GA_GEAR_STATE_7" />
     <action name="GA_GEAR_STATE_8" />
+    <action name="GA_GEAR_STATE_R" />
+    <action name="GA_GEAR_STATE_N" />
   </actions>
   <l10n>
     <text name="input_GA_GEAR_GROUP_STATE_1">
@@ -125,6 +131,12 @@
     </text>
     <text name="input_GA_GEAR_STATE_8">
       <en>Gear State 8</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_R">
+      <en>Gear State R</en>
+    </text>
+    <text name="input_GA_GEAR_STATE_N">
+      <en>Gear State N</en>
     </text>
   </l10n>
 </modDesc>

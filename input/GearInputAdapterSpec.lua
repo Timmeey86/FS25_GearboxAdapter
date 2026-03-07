@@ -77,6 +77,20 @@ function GearInputAdapterSpec:onRegisterActionEvents(_, isActiveForInputIgnoreSe
 				g_inputBinding:setActionEventText(actionEventId, "")
 				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
 			end
+			-- Neutral gear
+			local callback = function(s) s:onGearStateChanged(0) end
+			local _, actionEventId = self:addActionEvent(spec.actionEvents, "GA_GEAR_STATE_N", self, callback, false, true, false, true, nil)
+			g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
+			g_inputBinding:setActionEventText(actionEventId, "")
+			g_inputBinding:setActionEventTextVisibility(actionEventId, false)
+
+			-- Reverse gear
+			callback = function(s) s:onGearStateChanged(-1) end
+			_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_GEAR_STATE_R", self, callback, false, true, false, true, nil)
+			g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
+			g_inputBinding:setActionEventText(actionEventId, "")
+			g_inputBinding:setActionEventTextVisibility(actionEventId, false)
+			
 			GearInputAdapterSpec.updateActionEvents(self)
 		end
 	end
@@ -97,19 +111,20 @@ function GearInputAdapterSpec:onEnterVehicle()
 		if not motor:getUseAutomaticGearShifting() then
 			-- Manually shifted vehicle
 			local numForwardGears = motor.forwardGears and #motor.forwardGears or 1
+			local numReverseGears = motor.backwardGears and #motor.backwardGears or 0
 			local numGearGroups = motor.gearGroups and #motor.gearGroups or 1
-			Logging.info("Entered vehicle with %d gear groups and %d forward gears", numGearGroups, numForwardGears)
-			GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(numGearGroups, numForwardGears)
+			Logging.info("Entered vehicle with %d gear groups, %d forward gears and %d reverse gears", numGearGroups, numForwardGears, numReverseGears)
+			GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(numGearGroups, numForwardGears, numReverseGears)
 			return
 		end
 	end
 	-- All other cases (No motor, CVT, ...): Disable input processing
-	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil)
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil, nil)
 end
 
 function GearInputAdapterSpec:onLeaveVehicle()
 	-- Reset current gear layout so inputs are no longer being processed
-	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil)
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil, nil)
 end
 
 function GearInputAdapterSpec:onManualClutchChanged(clutchValue)
