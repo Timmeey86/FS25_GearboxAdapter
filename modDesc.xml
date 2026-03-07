@@ -16,6 +16,7 @@
     <sourceFile filename="domain/outgoing/GearChangeInterface.lua" />
     <sourceFile filename="domain/core/InputTransformationStrategy.lua" />
     <sourceFile filename="domain/core/strategy/SequentialTransformationStrategy.lua" />
+    <sourceFile filename="domain/core/strategy/EatonFuller18TransformationStrategy.lua" />
     <sourceFile filename="domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
     <sourceFile filename="output/GearChangeHandler.lua" />

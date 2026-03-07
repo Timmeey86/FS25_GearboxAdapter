@@ -6,21 +6,25 @@
 ---@field currentInputGroup number @The currently selected gear group input
 ---@field inputEnabled boolean @True while input shall be processed. False while outside a vehicle, or within a CVT vehicle, for example.
 ---@field gearChangeImpl GearChangeInterface @The implementation of the interface which changes gears in the FS vehicle.
+---@field clutchIsPressed boolean @True while the clutch is pressed.
 DomainGearboxAdapter = {}
 local DomainGearboxAdapter_mt = Class(DomainGearboxAdapter, GearboxAdapterInterface)
 
----Constructor
+---Constructor. 
 ---@param gearChangeImpl GearChangeInterface @The implementation of the interface which changes gears in the FS vehicle.
+---@param clutchEnabledFunc function @A function which checks whether the clutch is enabled in the settings.
 ---@return GearboxAdapterInterface @The public interface of the class
-function DomainGearboxAdapter.new(gearChangeImpl)
+function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 	local self = setmetatable({}, DomainGearboxAdapter_mt)
 	self.strategies = {
 		[GearboxAdapterInterface.STRATEGY.SEQUENTIAL] = SequentialTransformationStrategy.new(),
+		[GearboxAdapterInterface.STRATEGY.EATON_FULLER_18] = EatonFuller18TransformationStrategy.new(clutchEnabledFunc),
 	}
 	self.currentInputGroup = 1
 	self.currentInputGear = 1
 	self.inputEnabled = false
 	self.gearChangeImpl = gearChangeImpl
+	self.clutchIsPressed = false
 	return self
 end
 
@@ -92,5 +96,17 @@ function DomainGearboxAdapter:setGearInput(gear)
 		local vehicleGroup, vehicleGear = self.activeStrategy:transformGearInput(self.currentInputGroup, self.currentInputGear)
 		Logging.info("Switching to gear group %s and gear %s", vehicleGroup, vehicleGear)
 		self.gearChangeImpl:changeGroupAndGear(vehicleGroup, vehicleGear)
+	end
+end
+
+---Call this function when the clutch state changes
+---@param inputValue number @The clutch's input value (0..1, where 1 = pressed)
+function DomainGearboxAdapter:setClutchState(inputValue)
+	if self.clutchIsPressed and inputValue < 0.5 then
+		self.clutchIsPressed = false
+		self.activeStrategy:setClutchPressed(false)
+	elseif not self.clutchIsPressed and inputValue >= 0.5 then
+		self.clutchIsPressed = true
+		self.activeStrategy:setClutchPressed(true)
 	end
 end

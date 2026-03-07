@@ -86,3 +86,9 @@ function SequentialTransformationStrategy:transformGearInput(groupInput, gearInp
 
 	return outputGroup, outputGear
 end
+
+---Tells the strategy that the clutch was pressed or released.
+---@param isPressed boolean @True if the clutch is pressed, false otherwise.
+function SequentialTransformationStrategy:setClutchPressed(isPressed)
+	-- We're currently not interested in the clutch. Might come later.
+end

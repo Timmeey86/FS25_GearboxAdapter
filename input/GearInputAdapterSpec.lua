@@ -112,6 +112,11 @@ function GearInputAdapterSpec:onLeaveVehicle()
 	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil)
 end
 
+function GearInputAdapterSpec:onManualClutchChanged(clutchValue)
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setClutchState(clutchValue)
+end
+VehicleMotor.onManualClutchChanged = Utils.appendedFunction(VehicleMotor.onManualClutchChanged, GearInputAdapterSpec.onManualClutchChanged)
+
 function GearInputAdapterSpec:updateActionEvents()
 	local spec = self:getSpec()
 	for i = 1, 8 do

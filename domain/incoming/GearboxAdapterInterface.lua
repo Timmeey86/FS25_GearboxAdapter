@@ -38,3 +38,9 @@ end
 function GearboxAdapterInterface:setGearInput(gear)
 	error("Method 'setGearInput' not defined in implementing class")
 end
+
+---Call this function when the clutch state changes
+---@param inputValue number @The clutch's input value (0..1, where 1 = pressed)
+function GearboxAdapterInterface:setClutchState(inputValue)
+	error("Method 'setClutchState' not defined in implementing class")
+end

@@ -26,3 +26,9 @@ function InputTransformationStrategy:transformGearInput(groupInput, gearInput)
 	error("Method 'transformGearInput' not defined in implementing class")
 	return 1, 1
 end
+
+---Tells the strategy that the clutch was pressed.
+---@param isPressed boolean @True if the clutch is pressed, false otherwise.
+function InputTransformationStrategy:setClutchPressed(isPressed)
+	error("Method 'setClutchPressed' not defined in implementing class")
+end
