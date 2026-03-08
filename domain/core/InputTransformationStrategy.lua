@@ -2,6 +2,12 @@
 ---@class InputTransformationStrategy
 InputTransformationStrategy = {}
 
+---Registers a new vehicle gear/group layout to be processed from now on
+---@param vehicleGearboxInfo VehicleGearboxInfo|nil information about the vehicle's gearbox or nil if no vehicle
+function InputTransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+	error("Method 'setGearboxInfo' not defined in implementing class")
+end
+
 ---Sets the number of gear groups and gears the player can select with their controller. Note that some input strategies might ignore this. It is mainly meant for those which e.g. support 6 and 8 gear shifters for groups and/or gears.
 ---@param maxGroups number @The number of gear groups the player can select with their controller.
 ---@param maxGears number @The number of gears per gear group the player can select with their controller.

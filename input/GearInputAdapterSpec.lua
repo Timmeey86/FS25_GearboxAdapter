@@ -108,26 +108,30 @@ function GearInputAdapterSpec:onEnterVehicle()
 	local spec_motorized = self.spec_motorized
 	if spec_motorized and spec_motorized.motor then
 		local motor = spec_motorized.motor
-		if not motor:getUseAutomaticGearShifting() then
-			-- Manually shifted vehicle
-			local numForwardGears = motor.forwardGears and #motor.forwardGears or 1
-			local numReverseGears = motor.backwardGears and #motor.backwardGears or 0
-			local numGearGroups = motor.gearGroups and #motor.gearGroups or 1
-			Logging.info("Entered vehicle with %d gear groups, %d forward gears and %d reverse gears", numGearGroups, numForwardGears, numReverseGears)
-			GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(numGearGroups, numForwardGears, numReverseGears)
-			return
-		end
+
+		local hasAutomaticShift = motor:getUseAutomaticGearShifting() or motor.forwardGears == nil
+		local needsClutchForGroups = not hasAutomaticShift and motor.groupType ~= VehicleMotor.TRANSMISSION_TYPE.POWERSHIFT
+		local needsClutchForGears = not hasAutomaticShift and motor.gearType ~= VehicleMotor.TRANSMISSION_TYPE.POWERSHIFT
+		local numForwardGears = (not hasAutomaticShift and motor.forwardGears and #motor.forwardGears) or 1
+		local numReverseGears = (not hasAutomaticShift and motor.backwardGears and #motor.backwardGears) or 0
+		local numGearGroups = (not hasAutomaticShift and motor.gearGroups and #motor.gearGroups) or 1
+
+		local gearboxInfo = VehicleGearboxInfo.new(hasAutomaticShift, needsClutchForGroups, needsClutchForGears, numGearGroups, numForwardGears, numReverseGears)
+
+		GearInputAdapterSpec.GEARBOX_ADAPTER:setGearboxInfo(gearboxInfo)
+		return
 	end
-	-- All other cases (No motor, CVT, ...): Disable input processing
-	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil, nil)
+
+	-- All other cases (No motor, CVT, automatic shifting, ...): Disable input processing
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setGearboxInfo(nil)
 end
 
 function GearInputAdapterSpec:onLeaveVehicle()
 	-- Reset current gear layout so inputs are no longer being processed
-	GearInputAdapterSpec.GEARBOX_ADAPTER:setCurrentGearLayout(nil, nil, nil)
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setGearboxInfo(nil)
 end
 
-function GearInputAdapterSpec:onManualClutchChanged(clutchValue)
+function GearInputAdapterSpec.onManualClutchChanged(vehicle, clutchValue)
 	GearInputAdapterSpec.GEARBOX_ADAPTER:setClutchState(clutchValue)
 end
 VehicleMotor.onManualClutchChanged = Utils.appendedFunction(VehicleMotor.onManualClutchChanged, GearInputAdapterSpec.onManualClutchChanged)

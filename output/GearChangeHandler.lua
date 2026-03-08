@@ -31,17 +31,17 @@ function GearChangeHandler:changeGroupAndGear(group, gear)
 	end
 
 	Logging.info("FS25 Adapter: Changing group and gear to %s and %s", group, gear)
-	if group then
-		motor:setGearGroup(group, false)
+	if group and motor.gearGroups ~= nil then
+		motor:selectGroup(group, true)
 	-- else: don't change group
 	end
 
-	-- TODO: Use VehicleMotor:changeDirection or something so the vehicle doesn't instantly turn around
-	motor.currentDirection = motor.directionChangeUseGear and (gear >= 0 and 1 or -1) or 1
-	if motor.currentDirection < 0 then
-		motor.currentGears = motor.backwardGears or motor.forwardGears
-	else
-		motor.currentGears = motor.forwardGears
+	-- Change direction, unless it's a vehicle which uses forward gears in both directions
+	local newDirection = gear >= 0 and 1 or -1
+	if not motor.directionChangeUseInverse and newDirection ~= motor.currentDirection then
+		motor:changeDirection(newDirection)
 	end
-	motor:setGear(gear < 0 and -gear or gear)
+
+	-- FS25 always treats gears as positive numbers, even backwards ones.
+	motor:selectGear(gear < 0 and -gear or gear, gear ~= 0)
 end

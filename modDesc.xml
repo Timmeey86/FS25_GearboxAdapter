@@ -12,6 +12,8 @@
   <iconFilename>icon_GearboxAdapter.dds</iconFilename>
   <extraSourceFiles>
     <!--Generic domain code-->
+    <sourceFile filename="domain/data/InputControllerInfo.lua" />
+    <sourceFile filename="domain/data/VehicleGearboxInfo.lua" />
     <sourceFile filename="domain/incoming/GearboxAdapterInterface.lua" />
     <sourceFile filename="domain/outgoing/GearChangeInterface.lua" />
     <sourceFile filename="domain/core/GearSelectionData.lua" />
@@ -137,6 +139,9 @@
     </text>
     <text name="input_GA_GEAR_STATE_N">
       <en>Gear State N</en>
+    </text>
+    <text name="GA_WARNING_NO_REVERSE_GEARS">
+      <en>No reverse gears in this vehicle. Use the "change direction" action instead.</en>
     </text>
   </l10n>
 </modDesc>

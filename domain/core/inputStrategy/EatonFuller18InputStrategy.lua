@@ -26,6 +26,8 @@
 ---@field currentGroup number @The currently selected input group.
 ---@field currentGear number @The currently selected input gear.
 ---@field maxSequentialGear number @The highest possible number this strategy could produce
+---@field vehicleGearboxInfo VehicleGearboxInfo|nil @Information about the current vehicle's gearbox or nil if no vehicle
+---@field clutchIsPressed boolean @True while the clutch is pressed
 EatonFuller18TransformationStrategy = {}
 local EatonFuller18TransformationStrategy_mt = Class(EatonFuller18TransformationStrategy, InputTransformationStrategy)
 
@@ -42,25 +44,43 @@ function EatonFuller18TransformationStrategy.new(clutchEnabledFunc, forwardToOut
 	self.currentGroup = 1
 	self.currentGear = 1
 	self.maxSequentialGear = 16
+	self.vehicleGearboxInfo = nil
+	self.clutchIsPressed = false
 	return self
 end
 
----Tells the strategy that the clutch was pressed or released.
+---Registers a new vehicle gear/group layout to be processed from now on
+---@param vehicleGearboxInfo VehicleGearboxInfo|nil information about the vehicle's gearbox or nil if no vehicle
+function EatonFuller18TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+	self.vehicleGearboxInfo = vehicleGearboxInfo
+end
+
+---Executes pending gear changes if the clutch was pressed.
 ---@param isPressed boolean @True if the clutch is pressed, false otherwise.
 function EatonFuller18TransformationStrategy:setClutchPressed(isPressed)
 	if not self.clutchEnabledFunc() then
 		return
 	end
 
-	if (self.pendingGroup ~= nil or self.pendingGear ~= nil) and not isPressed then
-		-- The player has activated the splitter or range selector, and released the clutch afterwards.
-		-- => Change the gear now
-		local newGroup = self.pendingGroup or self.currentGroup
-		local newGear = self.pendingGear or self.currentGear
-		self.forwardToOutputStrategyFunc(self:transformGearInput(newGroup, newGear))
-	elseif isPressed then
-		-- TODO: switch to neutral gear, but don't mess up the case where the clutch is pressed and released without changing gears
+	self.clutchIsPressed = isPressed
+
+	-- Apply pre-queued changes as soon as the clutch gets pressed
+	local newGroup = nil
+	local newGear = nil
+	if self.pendingGroup ~= nil and isPressed then
+		newGroup = self.pendingGroup
+		self.pendingGroup = nil
 	end
+	if self.pendingGear ~= nil and isPressed then
+		newGear = self.pendingGear
+		self.pendingGear = nil
+	end
+
+	if newGroup ~= nil or newGear ~= nil then
+		-- Execute pre-queued changes now
+		self.forwardToOutputStrategyFunc(self:transformGearInput(newGroup or self.currentGroup, newGear or self.currentGear))
+	end
+	-- else: Nothing pre-queued, nothing to do
 end
 
 ---Sets the number of gear groups and gears the player can select with their controller.
@@ -74,24 +94,48 @@ end
 ---Sets the given gear group active.
 ---@param newGroup number @The group which was selected by the input controller
 function EatonFuller18TransformationStrategy:changeGearGroup(newGroup)
-	if self.clutchEnabledFunc() then
-		-- Delay group changes until the clutch is released (even if changed before the clutch was pressed)
-		self.pendingGroup = newGroup
-	else
-		-- Apply instantly
-		self.forwardToOutputStrategyFunc(self:transformGearInput(newGroup, self.currentGear))
+	local vehicleGearboxInfo = self.vehicleGearboxInfo
+	if not vehicleGearboxInfo or vehicleGearboxInfo.hasAutomaticShift then
+		return
 	end
+
+	-- Check if we need to press the clutch, dependent on settings and vehicle.
+	local needsClutch = self.clutchEnabledFunc() and vehicleGearboxInfo.needsClutchForGroups
+
+	if needsClutch and not self.clutchIsPressed then
+		-- Delay the group change if the clutch needs to be pressed but isn't currently
+		self.pendingGroup = newGroup
+		return
+	end
+
+	-- Other cases (Clutch not required, or required and pressed): Apply the change immediately
+	self.forwardToOutputStrategyFunc(self:transformGearInput(newGroup, self.currentGear))
 end
 
 ---Sets the given gear active.
 function EatonFuller18TransformationStrategy:changeGear(newGear)
-	if self.clutchEnabledFunc() then
-		-- Delay gear changes until the clutch is released (even if changed before the clutch was pressed)
-		self.pendingGear = newGear
-	else
-		-- Apply instantly
-		self.forwardToOutputStrategyFunc(self:transformGearInput(self.currentGroup, newGear or 0))
+	local vehicleGearboxInfo = self.vehicleGearboxInfo
+	if not vehicleGearboxInfo or vehicleGearboxInfo.hasAutomaticShift then
+		return
 	end
+
+	-- Check if we need to press the clutch, dependent on settings and vehicle.
+	local needsClutch = self.clutchEnabledFunc() and vehicleGearboxInfo.needsClutchForGears
+
+	-- Check if it's the neutral gear and if it should be processed.
+	-- For manual transmissions, the neutral gear should instantly be shown, no matter if the clutch is pressed or not
+	-- For powershift transmissions, the neutral gear should be ignored since the driver can just shift from one gear to the other
+	-- and hydraulics and/or electronics would handle the procedure in background.
+	local neutralGearShouldBeApplied = newGear == 0 and vehicleGearboxInfo.needsClutchForGears
+
+	if needsClutch and not self.clutchIsPressed and not neutralGearShouldBeApplied then
+		-- Delay the gear change if the clutch needs to be pressed but isn't currently
+		self.pendingGear = newGear
+		return
+	end
+
+	-- Other cases (Clutch not required, or required and pressed, or gear removed without clutch): Apply the change immediately
+	self.forwardToOutputStrategyFunc(self:transformGearInput(self.currentGroup, newGear))
 end
 
 ---Transforms the generic gear group and gear inputs into a gear selection.

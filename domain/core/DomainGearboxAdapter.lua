@@ -6,14 +6,9 @@
 ---@field activeOutputStrategy OutputTransformationStrategy @The currently active output transformation strategy
 ---@field currentInputGear number @The currently selected gear input
 ---@field currentInputGroup number @The currently selected gear group input
----@field inputEnabled boolean @True while input shall be processed. False while outside a vehicle, or within a CVT vehicle, for example.
 ---@field gearChangeImpl GearChangeInterface @The implementation of the interface which changes gears in the FS vehicle.
 ---@field clutchIsPressed boolean @True while the clutch is pressed.
----@field lastVehicleGroupCount number|nil @The group count of the last known vehicle
----@field lastVehicleForwardGearCount number|nil @The forward gear count of the last known vehicle
----@field lastVehicleReverseGearCount number|nil @The reverse gear count of the last known vehicle
----@field lastInputMaxGroups number|nil @The max groups of the last known input limits
----@field lastInputMaxGears number|nil @The max gears of the last known input limits
+---@field vehicleGearboxInfo VehicleGearboxInfo|nil @Information about the current vehicle's gearbox or nil if no vehicle
 DomainGearboxAdapter = {}
 local DomainGearboxAdapter_mt = Class(DomainGearboxAdapter, GearboxAdapterInterface)
 
@@ -24,7 +19,9 @@ local DomainGearboxAdapter_mt = Class(DomainGearboxAdapter, GearboxAdapterInterf
 function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 	local self = setmetatable({}, DomainGearboxAdapter_mt)
 
-	local forwardToOutputStrategyFunc = function(gearSelectionData) self.activeOutputStrategy:applyNewData(gearSelectionData) end
+	local forwardToOutputStrategyFunc = function(gearSelectionData)
+		self.activeOutputStrategy:applyNewData(gearSelectionData)
+	end
 
 	self.inputStrategies = {
 		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18] = EatonFuller18TransformationStrategy.new(clutchEnabledFunc, forwardToOutputStrategyFunc),
@@ -34,15 +31,10 @@ function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 	}
 	self.currentInputGroup = 1
 	self.currentInputGear = 1
-	self.inputEnabled = false
 	self.clutchIsPressed = false
 	self.activeOutputStrategy = nil
 	self.activeInputStrategy = nil
-	self.lastVehicleGroupCount = nil
-	self.lastVehicleForwardGearCount = nil
-	self.lastVehicleReverseGearCount = nil
-	self.lastInputMaxGroups = nil
-	self.lastInputMaxGears = nil
+	self.vehicleGearboxInfo = nil
 	return self
 end
 
@@ -54,6 +46,7 @@ function DomainGearboxAdapter:setInputTransformationStrategy(strategy)
 		return
 	end
 	self.activeInputStrategy = self.inputStrategies[strategy]
+	self.activeInputStrategy:setGearboxInfo(self.vehicleGearboxInfo)
 	-- Forward the current input limits to the strategy
 	self:setInputLimits(self.lastInputMaxGroups, self.lastInputMaxGears)
 end
@@ -66,32 +59,21 @@ function DomainGearboxAdapter:setOutputTransformationStrategy(strategy)
 		return
 	end
 	self.activeOutputStrategy = self.outputStrategies[strategy]
+	self.activeOutputStrategy:setGearboxInfo(self.vehicleGearboxInfo)
 	-- Forward the current vehicle's data to the output strategy
-	self:setCurrentGearLayout(self.lastVehicleGroupCount, self.lastVehicleForwardGearCount, self.lastVehicleReverseGearCount)
+	self:setGearboxInfo(self.vehicleGearboxInfo)
 end
 
----Tells the domain core how many gear groups and gears per gear group the vehicle has. Supply nil to both parameters when leaving a vehicle
----@param groupCount number|nil @The number of gear groups the vehicle has
----@param forwardGearCount number|nil @The number of gears per gear group the vehicle has. If groupCount is nil, 0 or 1, this is the total number of gears.
----@param reverseGearCount number|nil @The number of reverse gears the vehicle has.
-function DomainGearboxAdapter:setCurrentGearLayout(groupCount, forwardGearCount, reverseGearCount)
-	self.lastVehicleGroupCount = groupCount
-	self.lastVehicleForwardGearCount = forwardGearCount
-	self.lastVehicleReverseGearCount = reverseGearCount
+---Forwards information about the current vehicle to the domain core
+---@param vehicleGearboxInfo VehicleGearboxInfo|nil information about the vehicle's gearbox or nil if no vehicle
+function DomainGearboxAdapter:setGearboxInfo(vehicleGearboxInfo)
+	self.vehicleGearboxInfo = vehicleGearboxInfo
 
-	if not self.activeInputStrategy then
-		return
+	if self.activeInputStrategy then
+		self.activeInputStrategy:setGearboxInfo(vehicleGearboxInfo)
 	end
-	if forwardGearCount ~= nil then
-		local totalGearCount = forwardGearCount
-		if groupCount ~= nil and groupCount > 1 then
-			totalGearCount = groupCount * forwardGearCount
-		end
-		Logging.info("Setting to %s groups, %s forward gears per group and %s reverse gears", groupCount, forwardGearCount, reverseGearCount or 0)
-		self.activeOutputStrategy:changeVehicle(groupCount or 1, forwardGearCount, reverseGearCount or 0, totalGearCount)
-		self.inputEnabled = true
-	else
-		self.inputEnabled = false
+	if self.activeOutputStrategy then
+		self.activeOutputStrategy:setGearboxInfo(vehicleGearboxInfo)
 	end
 end
 
@@ -112,8 +94,8 @@ end
 ---Tells the domain core to process a change in the gear group input. Dependent on the transformation strategy, this may or may not result in this very gear group being selected in the vehicle.
 ---@param group number @The new gear group number
 function DomainGearboxAdapter:setGearGroupInput(group)
-	if not self.activeInputStrategy or not self.inputEnabled then
-		Logging.info("Skipping gear group since no strategy or input disabled")
+	if not self.activeInputStrategy then
+		Logging.info("Skipping gear group since no strategy")
 		return
 	end
 	self.currentInputGroup = group or 1
@@ -125,8 +107,8 @@ end
 ---Tells the domain core to process a change in the gear input. Dependent on the transformation strategy, this may or may not result in this very gear being selected in the vehicle.
 ---@param gear number @The new gear number
 function DomainGearboxAdapter:setGearInput(gear)
-	if not self.activeInputStrategy or not self.inputEnabled then
-		Logging.info("Skipping gear input since no strategy or input disabled")
+	if not self.activeInputStrategy then
+		Logging.info("Skipping gear input since no strategy")
 		return
 	end
 	self.currentInputGear = gear or 1
@@ -136,10 +118,13 @@ end
 ---Call this function when the clutch state changes
 ---@param inputValue number @The clutch's input value (0..1, where 1 = pressed)
 function DomainGearboxAdapter:setClutchState(inputValue)
-	if self.clutchIsPressed and inputValue < 0.5 then
+	-- Usually, a value of 0.5 would be used to switch between clutch pressed and released.
+	-- We ask the clutch to be pressed 60% however, so if any game check is executed because of our gear or gear group changes,
+	-- the clutch is still considered pressed by the game, even if we only catch it at 58% or something.
+	if self.clutchIsPressed and inputValue < 0.6 then
 		self.clutchIsPressed = false
 		self.activeInputStrategy:setClutchPressed(false)
-	elseif not self.clutchIsPressed and inputValue >= 0.5 then
+	elseif not self.clutchIsPressed and inputValue >= 0.6 then
 		self.clutchIsPressed = true
 		self.activeInputStrategy:setClutchPressed(true)
 	end

@@ -25,15 +25,15 @@ end
 ---@param groupCount number|nil @The number of gear groups the vehicle has
 ---@param forwardGearCount number|nil @The number of gears per gear group the vehicle has. If groupCount is nil, 0 or 1, this is the total number of gears.
 ---@param reverseGearCount number|nil @The number of reverse gears the vehicle has.
-function GearboxAdapterInterface:setCurrentGearLayout(groupCount, forwardGearCount, reverseGearCount)
-	error("Method 'setCurrentGearLayout' not defined in implementing class")
+---@param needsClutch boolean|nil @True if the clutch needs to be pressed for changes to happen. Powershift transmissions don't need that, for example.
+function GearboxAdapterInterface:setGearboxInfo(vehicleGearboxInfo)
+	error("Method 'setGearboxInfo' not defined in implementing class")
 end
 
 ---Tells the domain core how many gears and groups the player can select
 ---@param maxGroups number @The number of gear groups the player can select with their controller.
 ---@param maxForwardGears number @The number of forward gears the player can select with their controller.
----@param maxReverseGears number @The number of reverse gears the player can select with their controller.
-function GearboxAdapterInterface:setInputLimits(maxGroups, maxForwardGears, maxReverseGears)
+function GearboxAdapterInterface:setInputLimits(maxGroups, maxForwardGears)
 	error("Method 'setInputLimits' not defined in implementing class")
 end
 

@@ -24,6 +24,10 @@ No, with it relying on an additional script which must be executed separately, t
 
 If you are using a truck shifter knob like in the picture above, then yes, it is necessary. If you are using some kind of different setup like two H-shifters at the same time, you might be able to cope without the script
 
+### Why can't I reverse some machines?
+
+You are likely sitting in a machine which doesn't have backwards gears or gear groups, but instead allows the same gears in two directions. For these vehicles, you need to toggle the driving direction manually, as it is done in real life. If you are using a truck shifter knob, which has a button on top of the two switches, it is recommended to bind that to the base game setting for changing directions (Space key by default).
+
 ## Detailed Architecture
 
 This mod tries to increase portability between game versions using a hexagonal architecture (ports and adapters) approach:

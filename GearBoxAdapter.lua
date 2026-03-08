@@ -1,4 +1,5 @@
 MOD_DIRECTORY = g_currentModDirectory
+MOD_NAME = g_currentModName
 
 local function isClutchEnabledFunc()
 	return g_gameSettings:getValue(GameSettings.SETTING.GEAR_SHIFT_MODE) == VehicleMotor.SHIFT_MODE_MANUAL_CLUTCH
@@ -11,7 +12,6 @@ local gearboxAdapter = DomainGearboxAdapter.new(gearChangeHandler, isClutchEnabl
 gearboxAdapter:setInputTransformationStrategy(GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18)
 gearboxAdapter:setOutputTransformationStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
 gearboxAdapter:setInputLimits(4, 6)
-gearboxAdapter:setCurrentGearLayout(3, 4) -- depends on vehicle
 
 
 TypeManager.finalizeTypes = Utils.prependedFunction(TypeManager.finalizeTypes, function(typeManager)
