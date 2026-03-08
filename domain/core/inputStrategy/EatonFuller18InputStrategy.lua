@@ -58,6 +58,8 @@ function EatonFuller18TransformationStrategy:setClutchPressed(isPressed)
 		local newGroup = self.pendingGroup or self.currentGroup
 		local newGear = self.pendingGear or self.currentGear
 		self.forwardToOutputStrategyFunc(self:transformGearInput(newGroup, newGear))
+	elseif isPressed then
+		-- TODO: switch to neutral gear, but don't mess up the case where the clutch is pressed and released without changing gears
 	end
 end
 

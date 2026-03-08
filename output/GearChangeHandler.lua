@@ -38,5 +38,10 @@ function GearChangeHandler:changeGroupAndGear(group, gear)
 
 	-- TODO: Use VehicleMotor:changeDirection or something so the vehicle doesn't instantly turn around
 	motor.currentDirection = motor.directionChangeUseGear and (gear >= 0 and 1 or -1) or 1
+	if motor.currentDirection < 0 then
+		motor.currentGears = motor.backwardGears or motor.forwardGears
+	else
+		motor.currentGears = motor.forwardGears
+	end
 	motor:setGear(gear < 0 and -gear or gear)
 end
