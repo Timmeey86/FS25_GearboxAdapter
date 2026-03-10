@@ -2,9 +2,23 @@
 ---@class GearChangeInterface
 GearChangeInterface = {}
 
----Selects the given group and gear
----@param group number|nil @The gear group to select (if applicable). Nil means "don't change the gear group".
----@param gear number @The gear to select within the given gear group
-function GearChangeInterface:changeGroupAndGear(group, gear)
-	error("Method 'changeGroupAndGear' not defined in implementing class")
+---Selects the given group, gear and direction
+---@param gearCalculationResult GearCalculationResult the group and gear to be selected
+function GearChangeInterface:applyChanges(gearCalculationResult)
+	error("Method 'applyChanges' not defined in implementing class")
+end
+
+---Asks the implementation to show a warning that the clutch needs to be pressed before changing groups
+function GearChangeInterface:showClutchWarningForGroupChange()
+	error("Method 'showClutchWarningForGroupChange' not defined in implementing class")
+end
+
+---Asks the implementation to show a warning that the clutch needs to be pressed before changing gears
+function GearChangeInterface:showClutchWarningForGearChange()
+	error("Method 'showClutchWarningForGearChange' not defined in implementing class")
+end
+
+---Asks the implementation to show a warning that direction needs to be changed manually, not through gears/groups
+function GearChangeInterface:showManualDirectionChangeWarning()
+	error("Method 'showManualDirectionChangeWarning' not defined in implementing class")
 end

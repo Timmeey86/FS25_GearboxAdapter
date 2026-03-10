@@ -11,7 +11,7 @@ local gearboxAdapter = DomainGearboxAdapter.new(gearChangeHandler, isClutchEnabl
 -- For now, use a fixed configuration
 gearboxAdapter:setInputTransformationStrategy(GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18)
 gearboxAdapter:setOutputTransformationStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
-gearboxAdapter:setInputLimits(4, 6)
+gearboxAdapter:setInputControllerInfo(InputControllerInfo.new(4, 6))
 
 
 TypeManager.finalizeTypes = Utils.prependedFunction(TypeManager.finalizeTypes, function(typeManager)

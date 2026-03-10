@@ -1,36 +1,40 @@
 ---An internal interface for interpreting controller inputs based on the player's choice.
+---Note that this isn't really an interface with type checks or similar, but it helps with maintaining a clean architecture and separation of concerns.
 ---@class InputTransformationStrategy
 InputTransformationStrategy = {}
 
----Registers a new vehicle gear/group layout to be processed from now on
----@param vehicleGearboxInfo VehicleGearboxInfo|nil information about the vehicle's gearbox or nil if no vehicle
+---Lets the strategy know details about the current vehicle
+---@param vehicleGearboxInfo VehicleGearboxInfo|nil @information about the vehicle's gearbox or nil if no vehicle
 function InputTransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
 	error("Method 'setGearboxInfo' not defined in implementing class")
+	-- Note: If you don't need this in the implementation, define the method anyway, but leave it empty.
 end
 
----Sets the number of gear groups and gears the player can select with their controller. Note that some input strategies might ignore this. It is mainly meant for those which e.g. support 6 and 8 gear shifters for groups and/or gears.
----@param maxGroups number @The number of gear groups the player can select with their controller.
----@param maxGears number @The number of gears per gear group the player can select with their controller.
-function InputTransformationStrategy:setInputLimits(maxGroups, maxGears)
-	error("Method 'setInputLimits' not defined in implementing class")
+---Lets the strategy know details about the input controller the player is using
+---@param inputControllerInfo InputControllerInfo|nil @information about the player's input controller(s)
+function InputTransformationStrategy:setInputControllerInfo(inputControllerInfo)
+	error("Method 'setInputControllerInfo' not defined in implementing class")
+	-- Note: If you don't need this in the implementation, define the method anyway, but leave it empty.
 end
 
----Sets the given gear group active.
----@param newGroup number @The group which was selected by the input controller
-function InputTransformationStrategy:changeGearGroup(newGroup)
-	error("Method 'changeGearGroup' not defined in implementing class")
-	-- Note: When implementing, ask for the OutputTransformationStrategy in the constructor and call methods on it in the implementation if necessary.
+---Calculates the effective gear based on the player's controller input, where 0 = neutral, <0 = reverse and >0 = forward
+---@param shifterInputData ShifterInputData @The current state of the player's controller input.
+---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
+function InputTransformationStrategy:calculateEffectiveGear(shifterInputData)
+	error("Method 'calculateEffectiveGear' not defined in implementing class")
+	return GearSelectionHint.new(0, 0, 0)
 end
 
----Sets the given gear active.
-function InputTransformationStrategy:changeGear(newGear)
-	error("Method 'changeGear' not defined in implementing class")
-	-- Note: When implementing, ask for the OutputTransformationStrategy in the constructor and call methods on it in the implementation if necessary.
+---Tells the caller whether this strategy supports queuing up group changes until the clutch is pressed
+---@return boolean @True if the strategy supports queuing in general.
+function InputTransformationStrategy:supportsQueuingForGroups()
+	error("Method 'supportsQueuingForGroups' not defined in implementing class")
+	return false
 end
 
----Tells the strategy that the clutch's pressed state has changed. This allows things like pre-queuing gear changes for some input strategies.
----@param isPressed boolean @True if the clutch is pressed, false otherwise.
-function InputTransformationStrategy:setClutchPressed(isPressed)
-	error("Method 'setClutchPressed' not defined in implementing class")
-	-- Note: When implementing, ask for the OutputTransformationStrategy in the constructor and call methods on it in the implementation if necessary.
+---Tells the caller whether this strategy supports queuing up gear changes until the clutch is pressed
+---@return boolean @True if the strategy supports queuing in general.
+function InputTransformationStrategy:supportsQueuingForGears()
+	error("Method 'supportsQueuingForGears' not defined in implementing class")
+	return false
 end

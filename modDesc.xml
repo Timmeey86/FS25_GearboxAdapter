@@ -14,9 +14,11 @@
     <!--Generic domain code-->
     <sourceFile filename="domain/data/InputControllerInfo.lua" />
     <sourceFile filename="domain/data/VehicleGearboxInfo.lua" />
+    <sourceFile filename="domain/data/ShifterInputData.lua" />
+    <sourceFile filename="domain/data/GearSelectionHint.lua" />
+    <sourceFile filename="domain/data/GearCalculationResult.lua" />
     <sourceFile filename="domain/incoming/GearboxAdapterInterface.lua" />
     <sourceFile filename="domain/outgoing/GearChangeInterface.lua" />
-    <sourceFile filename="domain/core/GearSelectionData.lua" />
     <sourceFile filename="domain/core/InputTransformationStrategy.lua" />
     <sourceFile filename="domain/core/OutputTransformationStrategy.lua" />
     <sourceFile filename="domain/core/outputStrategy/SequentialOutputStrategy.lua" />
