@@ -12,7 +12,7 @@
 DomainGearboxAdapter = {}
 local DomainGearboxAdapter_mt = Class(DomainGearboxAdapter, GearboxAdapterInterface)
 
----Constructor. 
+---Constructor.
 ---@param gearChangeImpl GearChangeInterface @The implementation of the interface which changes gears in the FS vehicle.
 ---@param clutchEnabledFunc function @A function which checks whether the clutch is enabled in the settings.
 ---@return GearboxAdapterInterface @The public interface of the class
@@ -137,6 +137,9 @@ function DomainGearboxAdapter:setGearInput(gear)
 				self.gearChangeImpl:showClutchWarningForGearChange()
 				return
 			end
+		elseif not self.vehicleGearboxInfo.needsClutchForGears and gear == 0 then
+			-- Do not shift into neutral for powershift transmissions
+			return
 		end
 	end
 
@@ -181,7 +184,7 @@ function DomainGearboxAdapter:onInputChanged()
 		-- The vehicle has no reverse gears, but rather requires the player to actively change direction.
 		-- Ignore the reversing request.
 		self.gearChangeImpl:showManualDirectionChangeWarning()
-		return nil
+		return
 	end
 
 	local gearCalculationResult = self.activeOutputStrategy:calculateGearSelection(gearSelectionHint)
