@@ -35,7 +35,15 @@ The initial setup procedure is not straightforward, but it's unfortunately neces
 
 1. Double click the `ShifterMapping.ahk` script in order to run it.
 1. Start the game and load into your savegame (You can safely do this before running the script, too).
-1. 
+
+### How it works ingame
+
+- Currently, CVT transmissions are not handled by the mod, so you can simple use your "Change direction" binding and not worry about the shifter
+- In manual and powershift transmissions, you can currently use [the Eaton 18 shifter pattern, except for the LH/LL gears](https://www.reddit.com/media?url=https%3A%2F%2Fi.redd.it%2Fhlsg1dpl4ce61.png). In the future, you'll be able to select your favourite pattern.
+- If the vehicle has powershift for gear groups, or gears, you can do changes without pressing the clutch.
+- For manual transmissions, you'll have to press the clutch. You can however pre-queue gear group changes, which will then get selected as soon as you press the clutch. If you remove a gear without pressing the clutch, or release the clutch while in neutral, your vehicle will be in neutral gear.
+- If the vehicle has more than 16 gears, you can currently not reach anything beyong 16
+- If the vehicle uses gear groups, your input will select the gears and gear groups sequentially, so for 3 groups with 5 gears each, 1L => 1.1, 1H => 1.2, ... , 3L => 1.5, 3H => 2.1 and so on
 
 The script is written so that it only ever sends input to Farming Simulator 25. It therefore does not matter if you exit it after quitting the game, or if you leave it running - your call.
 
