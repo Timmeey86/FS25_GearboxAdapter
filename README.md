@@ -2,7 +2,7 @@
 
 ## What does the mod do?
 
-- The mod allows the usage of USB Truck shifter controllers like this in Farming Simulator 25. It requires an AutoHotkey script to do so, however.
+- The mod allows the usage of USB Truck shifter controllers in Farming Simulator 25. It requires an AutoHotkey script to do so, however.
 - It allows using various realistic shifting patterns, and various gear selection strategies to be used (work in progress).
 - It also detects switching to neutral gear with a regular H shifter (only for manual transmission)
 
@@ -27,13 +27,15 @@ The initial setup procedure is not straightforward, but it's unfortunately neces
 1. In lines 4-5, where it says `3Joy2` and `3Joy1`, replace the `3` by the number of your truck shifting knob. In lines 6-12, replace the `4` by the number of your H shifter controller and replace the `13-19` by your button numbers, if necessary.
 1. Save the script and close the text editor
 1. Copy the `FS25_GearboxAdapter.zip` to your `mods` folder (by default `Documents\my games\FarmingSimulator2025\mods`). Don't extract the zip, just copy the file.
-1. Start the game, open the settings and *unbind anything in the gear and gear group sections*.
+1. Start the game, open the settings and **unbind any controller inputs currently bound to gears or gear groups**.
+1. Make sure you bind something to "Change direction", e.g. the push button on your truck shifting knob (top left in my case). Save the settings.
 1. Open your savegame, make sure to select the new Gearbox Adapter mod, load into the game, save and exit (just so you don't forget it later).
 
 ### After every restart of your computer
 
 1. Double click the `ShifterMapping.ahk` script in order to run it.
 1. Start the game and load into your savegame (You can safely do this before running the script, too).
+1. 
 
 The script is written so that it only ever sends input to Farming Simulator 25. It therefore does not matter if you exit it after quitting the game, or if you leave it running - your call.
 
