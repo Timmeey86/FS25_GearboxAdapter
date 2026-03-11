@@ -16,7 +16,7 @@
 
 The initial setup procedure is not straightforward, but it's unfortunately necessary. I'll walk you through it:
 
-1. Download and install [Autohotkey v2.0](https://www.autohotkey.com/) (or [build it from source if you prefer](https://github.com/AutoHotkey/AutoHotkey/tree/alpha)). This is a program which is able to execute scripts which can amongst others capture and simulate key presses, mouse movements etc.
+1. Download and install [Autohotkey v2.0 (Ctrl+Click to open in a new tab)](https://www.autohotkey.com/) (or [build it from source if you prefer](https://github.com/AutoHotkey/AutoHotkey/tree/alpha)).  This is a program which is able to execute scripts which can amongst others capture and simulate key presses, mouse movements etc.
 1. Download both of the zip files from [the most recent release](https://github.com/Timmeey86/FS25_GearboxAdapter/releases)
 1. Extract the `GearboxAdapter_Autohotkey.zip` to anywhere where you'll find it again. (**Don't just double click. Extract it!**)
 1. Doubleclick the `ControllerTestScript.ahk` in order to run the script. You'll see a window like this: ![Controller Test Script](doc/ControllerTestScript.png)
