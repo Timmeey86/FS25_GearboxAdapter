@@ -26,7 +26,7 @@ Loop {
 	; Whenever the binary state changes
 	if currentState != previousState {
 		; Send numpad keypresses to emulate four buttons rather than two switches
-		;if WinActive("ahk_exe FarmingSimulator2025Game.exe") {
+		if WinActive("ahk_exe FarmingSimulator2025Game.exe") {
 			if (currentState == 0) {
 				Send("{Numpad1}")
 			} else if (currentState == 1) {
@@ -36,7 +36,7 @@ Loop {
 			} else if (currentState == 3) {
 				Send("{Numpad4}")
 			}
-		;}
+		}
 		
 		Sleep 20
 		
@@ -64,7 +64,7 @@ Loop {
 	; Whenever the binary state changes
 	if currentGearState != previousGearState {
 		; Send Ctrl+numpad keypresses for each gear, but also for neutral
-		;if WinActive("ahk_exe FarmingSimulator2025Game.exe") {
+		if WinActive("ahk_exe FarmingSimulator2025Game.exe") {
 			if (currentGearState == 0) {
 				Send("^{Numpad0}") ; Neutral
 			} else if (gearState1 == 1) {
@@ -82,7 +82,7 @@ Loop {
 			} else if (gearStateR == 1) {
 				Send("^{Numpad9}") ; Reverse
 			}
-		;}
+		}
 		
 		Sleep 20
 		
