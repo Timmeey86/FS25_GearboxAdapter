@@ -22,7 +22,7 @@ The initial setup procedure is not straightforward, but it's unfortunately neces
 1. Doubleclick the `ControllerTestScript.ahk` in order to run the script. You'll see a window like this: ![Controller Test Script](doc/ControllerTestScript.png)
 1. Flip the switches on your truck shifting knob in order to find out which number this controller has in your system, and remember that number (in my example, it's `3`). For "Buttons Down: ", it should always show "1" and "2".
 1. Use your H shifter and remember the number of that controller, plus the numbers of your six gears plus the reverse gear as well (in my case, it's controller `4`, buttons `13`-`18` for forward gears, and `19` for reverse).
-1. Stop the script *through the tray icon*. Closing the window will still run the script in background. [Autohokey Tray Icon](doc/AutoHotkeyTray.png)
+1. Stop the script *through the tray icon*. Closing the window will still run the script in background. ![Autohokey Tray Icon](doc/AutoHotkeyTray.png)
 1. If your controller numbers and buttons are not , right-click the `ShifterMapping.ahk` script and edit the file in a text editor [like Notepad++](https://notepad-plus-plus.org/). Otherwise skip the next step.
 1. In lines 4-5, where it says `3Joy2` and `3Joy1`, replace the `3` by the number of your truck shifting knob. In lines 6-12, replace the `4` by the number of your H shifter controller and replace the `13-19` by your button numbers, if necessary.
 1. Save the script and close the text editor
