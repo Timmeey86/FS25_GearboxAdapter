@@ -14,7 +14,7 @@
 
 ### One-time setup for truck shifting knob + H shifter
 
-The initial setup procedure is not straightforward, but it's unfortunately necessary. I'll walk you through it:
+The initial setup procedure is not straightforward, but it's unfortunately necessary. I'll walk you through it, you only need to do it once:
 
 1. Download and install [Autohotkey v2.0 (Ctrl+Click to open in a new tab)](https://www.autohotkey.com/) (or [build it from source if you prefer](https://github.com/AutoHotkey/AutoHotkey/tree/alpha)).  This is a program which is able to execute scripts which can amongst others capture and simulate key presses, mouse movements etc.
 1. Download both of the zip files from [the most recent release](https://github.com/Timmeey86/FS25_GearboxAdapter/releases)
@@ -22,8 +22,8 @@ The initial setup procedure is not straightforward, but it's unfortunately neces
 1. Doubleclick the `ControllerTestScript.ahk` in order to run the script. You'll see a window like this: ![Controller Test Script](doc/ControllerTestScript.png)
 1. Flip the switches on your truck shifting knob in order to find out which number this controller has in your system, and remember that number (in my example, it's `3`). For "Buttons Down: ", it should always show "1" and "2".
 1. Use your H shifter and remember the number of that controller, plus the numbers of your six gears plus the reverse gear as well (in my case, it's controller `4`, buttons `13`-`18` for forward gears, and `19` for reverse).
-1. Stop the script *through the tray icon*. Closing the window will still run the script in background. ![Autohokey Tray Icon](doc/AutoHotkeyTray.png)
-1. If your controller numbers and buttons are not , right-click the `ShifterMapping.ahk` script and edit the file in a text editor [like Notepad++](https://notepad-plus-plus.org/). Otherwise skip the next step.
+1. Stop the script **through the tray icon in the bottom-right of your screen (click the upwards arrow to unfold)**. Closing the window will still run the script in background. ![Autohokey Tray Icon](doc/AutoHotkeyTray.png)
+1. If your controller numbers and buttons are not identical to my numbers, right-click the `ShifterMapping.ahk` script and edit the file in a text editor [like Notepad++](https://notepad-plus-plus.org/). Otherwise skip the next two steps.
 1. In lines 4-5, where it says `3Joy2` and `3Joy1`, replace the `3` by the number of your truck shifting knob. In lines 6-12, replace the `4` by the number of your H shifter controller and replace the `13-19` by your button numbers, if necessary.
 1. Save the script and close the text editor
 1. Copy the `FS25_GearboxAdapter.zip` to your `mods` folder (by default `Documents\my games\FarmingSimulator2025\mods`). Don't extract the zip, just copy the file.
