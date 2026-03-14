@@ -51,12 +51,23 @@ end
 ---@param shifterInputData ShifterInputData @The current state of the player's controller input.
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
 function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInputData)
+
+	-- Handle invalid data first
+	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6 then
+		return GearSelectionHint.new(0, 0, self.maxEffectiveGear, 0, 0)
+	end
+
 	local direction
 	local effectiveGear
+	local gearGroup
+	local gearInGroup
+
 	if shifterInputData.currentGearSlot == 1 then
 		-- top left => reverse, one gear per group, and four groups, so the group equals the effective gear
 		direction = -1
 		effectiveGear = shifterInputData.currentGroup
+		gearGroup = shifterInputData.currentGroup
+		gearInGroup = 1
 	elseif shifterInputData.currentGearSlot > 2 and shifterInputData.currentGearSlot < 7 then
 		-- Slots 3-6 in the gear shifter => Everything between 1L and 8H (16)
 		direction = 1
@@ -69,12 +80,17 @@ function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInput
 		effectiveGear = gearWithinGroup * 2 - (shifterInputData.currentGroup % 2 == 0 and 0 or 1)
 		-- add +8 if the range selector is in high range
 		effectiveGear = effectiveGear + 8 * (shifterInputData.currentGroup > 2 and 1 or 0)
+
+		gearGroup = shifterInputData.currentGroup
+		gearInGroup = gearWithinGroup
 	else
 		-- Player has selected the neutral gear or an unsupported slot like the crawler/low gears or 7 and 8 if their shifter supports it.
 		direction = 0
 		effectiveGear = 0
+		gearGroup = 0
+		gearInGroup = 0
 	end
-	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear, shifterInputData.currentGroup, shifterInputData.currentGearSlot)
+	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear, gearGroup, gearInGroup)
 end
 
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
