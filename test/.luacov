@@ -1,0 +1,4 @@
+return {
+	runreport = true,
+	reporter = "lcov"
+}

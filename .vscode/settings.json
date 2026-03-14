@@ -1,3 +1,6 @@
 {
-	"luau-lsp.plugin.enabled": true
+	"luau-lsp.plugin.enabled": true,
+	"coverage-gutters.coverageFileNames": [
+		"luacov.report.out"
+	]
 }

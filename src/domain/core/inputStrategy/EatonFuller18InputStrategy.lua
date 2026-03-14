@@ -77,16 +77,16 @@ function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInput
 	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear, shifterInputData.currentGroup, shifterInputData.currentGearSlot)
 end
 
----Tells the caller whether this strategy supports queuing up group changes until the clutch is pressed
----@return boolean @True if the strategy supports queuing in general.
-function EatonFuller18TransformationStrategy:supportsQueuingForGroups()
+---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
+---@return boolean @True if the strategy supports Queueing in general.
+function EatonFuller18TransformationStrategy:supportsQueueingForGroups()
 	-- In Eaton Fuller transmissions, the splitter or range selector can be switched at any time, and only when pressing and releasing the clutch,
 	-- the change will actually be performed.
 	return true
 end
 
----Tells the caller whether this strategy supports queuing up gear changes until the clutch is pressed
----@return boolean @True if the strategy supports queuing in general.
-function EatonFuller18TransformationStrategy:supportsQueuingForGears()
+---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
+---@return boolean @True if the strategy supports Queueing in general.
+function EatonFuller18TransformationStrategy:supportsQueueingForGears()
 	return false
 end

@@ -43,7 +43,6 @@ end
 function DomainGearboxAdapter:setInputTransformationStrategy(strategy)
 	if self.inputStrategies[strategy] == nil then
 		error("Strategy " .. strategy .. " not found in registered strategies")
-		return
 	end
 	self.activeInputStrategy = self.inputStrategies[strategy]
 	self.activeInputStrategy:setGearboxInfo(self.vehicleGearboxInfo)
@@ -55,7 +54,6 @@ end
 function DomainGearboxAdapter:setOutputTransformationStrategy(strategy)
 	if self.outputStrategies[strategy] == nil then
 		error("Strategy " .. strategy .. " not found in registered strategies")
-		return
 	end
 	self.activeOutputStrategy = self.outputStrategies[strategy]
 end
@@ -93,7 +91,7 @@ function DomainGearboxAdapter:setGearGroupInput(group)
 		if self.clutchEnabledFunc() and self.vehicleGearboxInfo.needsClutchForGroups and not self.currentShifterInputData.clutchIsPressed then
 
 			-- If the input strategy supports queueing, use that feature now
-			if self.activeInputStrategy:supportsQueuingForGroups() then
+			if self.activeInputStrategy:supportsQueueingForGroups() then
 				-- Remember the current shifter input. The next call on onInputChanged will apply that
 				self.currentShifterInputData.currentGroup = group
 				return
@@ -129,7 +127,7 @@ function DomainGearboxAdapter:setGearInput(gear)
 			end
 
 			-- If the input strategy supports queueing, use that feature now
-			if self.activeInputStrategy:supportsQueuingForGears() then
+			if self.activeInputStrategy:supportsQueueingForGears() then
 				self.currentShifterInputData.currentGearSlot = gear
 				return
 			else

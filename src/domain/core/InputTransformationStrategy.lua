@@ -25,16 +25,16 @@ function InputTransformationStrategy:calculateEffectiveGear(shifterInputData)
 	return GearSelectionHint.new(0, 0, 0)
 end
 
----Tells the caller whether this strategy supports queuing up group changes until the clutch is pressed
----@return boolean @True if the strategy supports queuing in general.
-function InputTransformationStrategy:supportsQueuingForGroups()
-	error("Method 'supportsQueuingForGroups' not defined in implementing class")
+---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
+---@return boolean @True if the strategy supports Queueing in general.
+function InputTransformationStrategy:supportsQueueingForGroups()
+	error("Method 'supportsQueueingForGroups' not defined in implementing class")
 	return false
 end
 
----Tells the caller whether this strategy supports queuing up gear changes until the clutch is pressed
----@return boolean @True if the strategy supports queuing in general.
-function InputTransformationStrategy:supportsQueuingForGears()
-	error("Method 'supportsQueuingForGears' not defined in implementing class")
+---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
+---@return boolean @True if the strategy supports Queueing in general.
+function InputTransformationStrategy:supportsQueueingForGears()
+	error("Method 'supportsQueueingForGears' not defined in implementing class")
 	return false
 end
