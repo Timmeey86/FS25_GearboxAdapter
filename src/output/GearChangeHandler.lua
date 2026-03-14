@@ -1,12 +1,11 @@
 ---This class is responsible for changing gears as requested by the domain core
 ---@class GearChangeHandler
 GearChangeHandler = {}
-local GearChangeHandler_mt = Class(GearChangeHandler, GearChangeInterface)
 
 ---Constructor
 ---@return GearChangeInterface @The public interface of the class
 function GearChangeHandler.new()
-	local self = setmetatable({}, GearChangeHandler_mt)
+	local self = setmetatable({}, {__index = GearChangeHandler})
 	return self
 end
 

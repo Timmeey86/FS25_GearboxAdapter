@@ -1,7 +1,7 @@
 ---The domain core which converts generic gear inputs into a gear selection based on a selection of possible strategies
----@class DomainGearboxAdapter
----@field inputStrategies table<string, InputTransformationStrategy> @The registered input transformation strategies
----@field outputStrategies table<string, OutputTransformationStrategy> @The registered output transformation strategies
+---@class DomainGearboxAdapter : GearboxAdapterInterface
+---@field inputStrategies table @The registered input transformation strategies
+---@field outputStrategies table @The registered output transformation strategies
 ---@field activeInputStrategy InputTransformationStrategy @The currently active input transformation strategy
 ---@field activeOutputStrategy OutputTransformationStrategy @The currently active output transformation strategy
 ---@field gearChangeImpl GearChangeInterface @The implementation of the interface which changes gears in the FS vehicle.
@@ -10,12 +10,15 @@
 ---@field inputControllerInfo InputControllerInfo|nil @Information about the player's input controller(s) or nil if not set yet
 ---@field clutchEnabledFunc function @A function which checks whether the clutch is enabled in the settings.
 DomainGearboxAdapter = {}
-local DomainGearboxAdapter_mt = Class(DomainGearboxAdapter, GearboxAdapterInterface)
+local DomainGearboxAdapter_mt = {
+	__metatable = setmetatable(DomainGearboxAdapter, {__index = GearboxAdapterInterface}),
+	__index = DomainGearboxAdapter
+}
 
 ---Constructor.
 ---@param gearChangeImpl GearChangeInterface @The implementation of the interface which changes gears in the FS vehicle.
 ---@param clutchEnabledFunc function @A function which checks whether the clutch is enabled in the settings.
----@return GearboxAdapterInterface @The public interface of the class
+---@return DomainGearboxAdapter @The public interface of the class
 function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 	local self = setmetatable({}, DomainGearboxAdapter_mt)
 
@@ -55,7 +58,6 @@ function DomainGearboxAdapter:setOutputTransformationStrategy(strategy)
 		return
 	end
 	self.activeOutputStrategy = self.outputStrategies[strategy]
-	self.activeOutputStrategy:setGearboxInfo(self.vehicleGearboxInfo)
 end
 
 ---Forwards information about the current vehicle to the domain core
@@ -66,9 +68,6 @@ function DomainGearboxAdapter:setGearboxInfo(vehicleGearboxInfo)
 	if self.activeInputStrategy then
 		self.activeInputStrategy:setGearboxInfo(vehicleGearboxInfo)
 	end
-	if self.activeOutputStrategy then
-		self.activeOutputStrategy:setGearboxInfo(vehicleGearboxInfo)
-	end
 end
 
 ---Tells the domain core what kind of input controller the player is using
@@ -77,6 +76,7 @@ function DomainGearboxAdapter:setInputControllerInfo(inputControllerInfo)
 	if self.activeInputStrategy then
 		self.activeInputStrategy:setInputControllerInfo(inputControllerInfo)
 	end
+	self.inputControllerInfo = inputControllerInfo
 	-- Reset input data
 	self.currentShifterInputData = ShifterInputData.new(0, 0, false)
 end
@@ -172,7 +172,7 @@ end
 
 ---Calculates a new effective gear, transforms that to a real group and gear, and asks the gear change implementation to execute the change.
 function DomainGearboxAdapter:onInputChanged()
-	if not self.activeInputStrategy or not self.activeOutputStrategy then
+	if not self.activeInputStrategy or not self.activeOutputStrategy or not self.vehicleGearboxInfo then
 		-- Ignore until the mod is set up correctly
 		return
 	end
@@ -187,9 +187,38 @@ function DomainGearboxAdapter:onInputChanged()
 		return
 	end
 
-	local gearCalculationResult = self.activeOutputStrategy:calculateGearSelection(gearSelectionHint)
+	-- Make sure the effective gear does not exceed what the vehicle can handle
+	DomainGearboxAdapter.limitGearSelectionHintIfNecessary(gearSelectionHint, self.vehicleGearboxInfo)
+
+	-- Let the output strategy calculate what should actually be selected
+	local gearCalculationResult = self.activeOutputStrategy:calculateGearSelection(gearSelectionHint, self.vehicleGearboxInfo)
+
+	-- If it produced a new result, apply it now
 	if gearCalculationResult then
 		self.gearChangeImpl:applyChanges(gearCalculationResult)
 	-- else: Nothing has changed effectively, e.g. when you use 10 inputs to control 4 gears, or whatever reason else
 	end
+end
+
+---Limits the gear selection hint so strategies can not produce gears which are out of bounds and we don't have to perform the same checks in all the 
+---strategies
+---@param gearSelectionHint GearSelectionHint the hint to be limited. This will be directly modified.
+---@param vehicleGearboxInfo VehicleGearboxInfo the current vehicle's gearbox info, used for checking the limits.
+function DomainGearboxAdapter.limitGearSelectionHintIfNecessary(gearSelectionHint, vehicleGearboxInfo)
+	-- Make sure the effective gear does not exceed what the vehicle can handle
+	local maxEffectiveGear
+	local maxGroup = 1
+	local maxGearInGroup
+	if vehicleGearboxInfo.maxGroups == 1 then
+		maxEffectiveGear = gearSelectionHint.direction >= 0 and vehicleGearboxInfo.maxForwardGears or vehicleGearboxInfo.maxReverseGears
+		maxGearInGroup = maxEffectiveGear
+	else
+		maxEffectiveGear = gearSelectionHint.direction > 0 and vehicleGearboxInfo.maxForwardGears * vehicleGearboxInfo.maxGroups or vehicleGearboxInfo.maxReverseGears
+		maxGroup = vehicleGearboxInfo.maxGroups
+		maxGearInGroup = (gearSelectionHint.direction > 0 and vehicleGearboxInfo.maxForwardGears or vehicleGearboxInfo.maxReverseGears)
+	end
+
+	gearSelectionHint.effectiveGear = math.min(gearSelectionHint.effectiveGear, maxEffectiveGear)
+	gearSelectionHint.gearGroup = gearSelectionHint.gearGroup and math.min(gearSelectionHint.gearGroup, maxGroup) or nil
+	gearSelectionHint.gearInGroup = gearSelectionHint.gearInGroup and math.min(gearSelectionHint.gearInGroup, maxGearInGroup) or nil
 end

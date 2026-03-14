@@ -18,14 +18,18 @@
 ---The strategy will transform the input into 4 groups (LL, LH, HL, HH) with 4 forward and 1 reverse gear each.
 ---Additionally, input will be transformed into a sequential number between -4 (RHH) and 16 (8H) for output strategies which need that.
 ---
----@class EatonFuller18TransformationStrategy
+---@class EatonFuller18TransformationStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
 EatonFuller18TransformationStrategy = {}
-local EatonFuller18TransformationStrategy_mt = Class(EatonFuller18TransformationStrategy, InputTransformationStrategy)
+local EatonFuller18TransformationStrategy_mt = {
+	__metatable = setmetatable(EatonFuller18TransformationStrategy, {__index = InputTransformationStrategy}),
+	__index = EatonFuller18TransformationStrategy
+}
 
 ---Constructor. When creating an object, make sure to connect it with clutch event handlers
 ---@return InputTransformationStrategy @The public interface of the class
 function EatonFuller18TransformationStrategy.new()
+
 	local self = setmetatable({}, EatonFuller18TransformationStrategy_mt)
 	self.maxEffectiveGear = 16
 	return self
@@ -70,7 +74,7 @@ function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInput
 		direction = 0
 		effectiveGear = 0
 	end
-	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear)
+	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear, shifterInputData.currentGroup, shifterInputData.currentGearSlot)
 end
 
 ---Tells the caller whether this strategy supports queuing up group changes until the clutch is pressed

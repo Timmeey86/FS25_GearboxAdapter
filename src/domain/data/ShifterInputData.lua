@@ -4,7 +4,6 @@
 ---@field currentGearSlot number @The currently selected shifter slot
 ---@field clutchIsPressed boolean @True if the clutch is currently pressed
 ShifterInputData = {}
-local ShifterInputData_mt = Class(ShifterInputData)
 
 ---Creates a new instance of ShifterInputData
 ---@param currentGroup number The currently selected shifter group (1 if not applicable)
@@ -12,7 +11,7 @@ local ShifterInputData_mt = Class(ShifterInputData)
 ---@param clutchIsPressed boolean True if the clutch is currently pressed
 ---@return ShifterInputData
 function ShifterInputData.new(currentGroup, currentGearSlot, clutchIsPressed)
-	local self = setmetatable({}, ShifterInputData_mt)
+	local self = setmetatable({}, {__index = ShifterInputData})
 	self.currentGroup = currentGroup
 	self.currentGearSlot = currentGearSlot
 	self.clutchIsPressed = clutchIsPressed

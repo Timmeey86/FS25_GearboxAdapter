@@ -4,7 +4,6 @@
 ---@field group number @The gear group which should be selected (1 if the vehicle has none)
 ---@field gear number @The gear which should be selected within the gear group
 GearCalculationResult = {}
-local GearCalculationResult_mt = Class(GearCalculationResult)
 
 ---Creates a new instance of the GearCalculationResult class
 ---@param direction number The direction the vehicle should move in, where 1 = forward, 0 = neutral, -1 = reverse
@@ -12,7 +11,7 @@ local GearCalculationResult_mt = Class(GearCalculationResult)
 ---@param gear number The gear which should be selected within the gear group
 ---@return GearCalculationResult
 function GearCalculationResult.new(direction, group, gear)
-	local self = setmetatable({}, GearCalculationResult_mt)
+	local self = setmetatable({}, {__index = GearCalculationResult})
 	self.direction = direction
 	self.group = group
 	self.gear = gear

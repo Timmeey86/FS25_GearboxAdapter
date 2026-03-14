@@ -12,24 +12,24 @@
   <iconFilename>icon_GearboxAdapter.dds</iconFilename>
   <extraSourceFiles>
     <!--Generic domain code-->
-    <sourceFile filename="domain/data/InputControllerInfo.lua" />
-    <sourceFile filename="domain/data/VehicleGearboxInfo.lua" />
-    <sourceFile filename="domain/data/ShifterInputData.lua" />
-    <sourceFile filename="domain/data/GearSelectionHint.lua" />
-    <sourceFile filename="domain/data/GearCalculationResult.lua" />
-    <sourceFile filename="domain/incoming/GearboxAdapterInterface.lua" />
-    <sourceFile filename="domain/outgoing/GearChangeInterface.lua" />
-    <sourceFile filename="domain/core/InputTransformationStrategy.lua" />
-    <sourceFile filename="domain/core/OutputTransformationStrategy.lua" />
-    <sourceFile filename="domain/core/outputStrategy/SequentialOutputStrategy.lua" />
-    <sourceFile filename="domain/core/inputStrategy/EatonFuller18InputStrategy.lua" />
-    <sourceFile filename="domain/core/DomainGearboxAdapter.lua" />
+    <sourceFile filename="src/domain/data/InputControllerInfo.lua" />
+    <sourceFile filename="src/domain/data/VehicleGearboxInfo.lua" />
+    <sourceFile filename="src/domain/data/ShifterInputData.lua" />
+    <sourceFile filename="src/domain/data/GearSelectionHint.lua" />
+    <sourceFile filename="src/domain/data/GearCalculationResult.lua" />
+    <sourceFile filename="src/domain/incoming/GearboxAdapterInterface.lua" />
+    <sourceFile filename="src/domain/outgoing/GearChangeInterface.lua" />
+    <sourceFile filename="src/domain/core/InputTransformationStrategy.lua" />
+    <sourceFile filename="src/domain/core/OutputTransformationStrategy.lua" />
+    <sourceFile filename="src/domain/core/outputStrategy/SequentialOutputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/EatonFuller18InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
-    <sourceFile filename="output/GearChangeHandler.lua" />
-    <sourceFile filename="GearboxAdapter.lua" />
+    <sourceFile filename="src/output/GearChangeHandler.lua" />
+    <sourceFile filename="src/GearboxAdapter.lua" />
   </extraSourceFiles>
   <specializations>
-    <specialization name="gearInputAdapter" className="GearInputAdapterSpec" filename="input/GearInputAdapterSpec.lua" />
+    <specialization name="gearInputAdapter" className="GearInputAdapterSpec" filename="src/input/GearInputAdapterSpec.lua" />
   </specializations>
   <inputBinding>
     <actionBinding action="GA_GEAR_GROUP_STATE_1">

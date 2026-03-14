@@ -7,7 +7,6 @@
 ---@field maxForwardGears number @The number of forward gears per gear group the vehicle has (if not CVT)
 ---@field maxReverseGears number @The number of reverse gears the vehicle has (if not CVT)
 VehicleGearboxInfo = {}
-local VehicleGearboxInfo_mt = Class(VehicleGearboxInfo)
 
 ---Creates a new instance of the VehicleGearboxInfo class
 ---@param hasAutomaticShift boolean True if the vehicle has a continuous variable transmission gearbox
@@ -18,7 +17,7 @@ local VehicleGearboxInfo_mt = Class(VehicleGearboxInfo)
 ---@param maxReverseGears number The number of reverse gears the vehicle has (if not CVT)
 ---@return VehicleGearboxInfo
 function VehicleGearboxInfo.new(hasAutomaticShift, needsClutchForGroups, needsClutchForGears, maxGroups, maxForwardGears, maxReverseGears)
-	local self = setmetatable({}, VehicleGearboxInfo_mt)
+	local self = setmetatable({}, {__index = VehicleGearboxInfo})
 	self.hasAutomaticShift = hasAutomaticShift
 	self.needsClutchForGroups = needsClutchForGroups
 	self.needsClutchForGears = needsClutchForGears
