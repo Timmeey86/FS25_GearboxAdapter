@@ -61,7 +61,9 @@ If you are using a truck shifter knob like in the picture above, then yes, it is
 
 You are likely sitting in a machine which doesn't have backwards gears or gear groups, but instead allows the same gears in two directions. For these vehicles, you need to toggle the driving direction manually, as it is done in real life. If you are using a truck shifter knob that has a button on top of the two switches, it is recommended to bind that to the base game setting for changing directions (Space key by default).
 
-## For developers: Detailed Architecture
+## For developers
+
+### Detailed Architecture
 
 This mod tries to increase portability between game versions using a hexagonal architecture (ports and adapters) approach:
 
@@ -74,3 +76,40 @@ Some of the benefits of doing this are:
 - The domain core can be easily unit tested, without having to rely on knowledge about complex game tables.
 - The domain core is reusable between different Farming Simulator versions - "only" the adapters have to be implemented.
 - The domain core has a much lower complexity since it does not mix domain logic with Farming Simulator specifics.
+
+### Unit Testing
+
+This mod uses the [busted](https://lunarmodules.github.io/busted/) framework for unit-testing the domain core.
+
+In order to do this, you'll need the following things:
+
+- The [lua compiler](https://www.lua.org/download.html)
+- The [lua package manager](https://luarocks.org/)
+- `luarocks install busted` (For executing unit tests)
+- `luarocks install luacov` (For generating code coverage)
+- `luarocks install luacov-reporter-lcov` (For converting code coverage to a more common format)
+- The [Coverage Gutters plugin for VSCode](https://github.com/ryanluker/vscode-coverage-gutters) (You can find it in the VSCode marketplace for free)
+
+Once you've got that all set up, you can create a local batch file like
+
+```bat
+::run_test.bat:
+
+:: Delete the coverage file since otherwise line hits will accumulate
+del luacov.stats.out
+
+:: Run the tests with coverage on anything inside the "test" folder and use the .luacov in that folder for configuration
+busted --coverage --coverage-config-file=test\.luacov -o plainTerminal test\*
+```
+
+In the .vscode folder, select, add the following configuration in the settings.json:
+
+```json
+{
+	"coverage-gutters.coverageFileNames": [
+		"luacov.report.out"
+	]
+}
+```
+
+If you then press Ctrl+Shift+P in VSCode and execute "Coverage Gutters: Watch", you'll start seeing Code Coverage markers as soon as you execute the run_tests.bat
