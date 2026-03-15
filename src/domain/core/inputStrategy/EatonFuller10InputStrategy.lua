@@ -2,8 +2,8 @@
 ---This strategy assumes they have a 6-gear H shifter with a truck shifting knob which offers a splitter and a range selector.
 ---The splitter won't be used, but the range selector will be.
 ---
----The shifting pattern is like this, where each position has a high and low splitter version, and a high and low range version,
----resulting in 4 possible gears per position.
+---The shifting pattern is like this, where each position has a high and low range version,
+---resulting in 2 possible gears per position.
 ---
 ---   RH      7      9  (High Range)
 ---   RL      2      4  (Low Range)
@@ -67,8 +67,8 @@ function EatonFuller10TransformationStrategy:calculateEffectiveGear(shifterInput
 		-- top left => reverse, only the range matters, not the splitter
 		direction = -1
 		effectiveGear = gearGroupIgnoringSplitter
-		gearGroup = effectiveGear
-		gearInGroup = 1
+		gearGroup = 1
+		gearInGroup = effectiveGear
 	elseif shifterInputData.currentGearSlot > 1 and shifterInputData.currentGearSlot < 7 then
 		-- Slots 2-6 in the gear shifter => Everything between 1-5 in low range and 6-10 in high range
 		direction = 1
@@ -82,7 +82,12 @@ function EatonFuller10TransformationStrategy:calculateEffectiveGear(shifterInput
 
 		gearGroup = gearGroupIgnoringSplitter
 		gearInGroup = gearWithinGroup
-	-- No else case, everything should be covered already (see also the top of the method)
+	else
+		-- neutral gear
+		direction = 0
+		effectiveGear = 0
+		gearGroup = 1
+		gearInGroup = 0
 	end
 	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear, gearGroup, gearInGroup)
 end

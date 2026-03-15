@@ -62,6 +62,12 @@ No, with it relying on an additional script which must be executed separately, t
 
 If you are using a truck shifter knob like in the picture above, then yes, it is necessary. If you are using some kind of different setup like two H-shifters at the same time, you might be able to cope without the script
 
+### What does the script actually do?
+
+It reads the state of the buttons as configured and simulates Numpad keypresses for the groups, and Ctrl+Numpad keypressed for the gears. You can see those mappings in the Farming Simulator 25 controls screen.
+
+If you wanted to change them to different keys for some reason, note that you have to adapt both FS25 controls and the autohotkey script.
+
 ### Why can't I reverse some machines?
 
 You are likely sitting in a machine which doesn't have backwards gears or gear groups, but instead allows the same gears in two directions. For these vehicles, you need to toggle the driving direction manually, as it is done in real life. If you are using a truck shifter knob that has a button on top of the two switches, it is recommended to bind that to the base game setting for changing directions (Space key by default).

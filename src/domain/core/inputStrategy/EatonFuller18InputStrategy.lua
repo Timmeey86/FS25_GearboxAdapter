@@ -10,12 +10,13 @@
 ---    |      |      |
 ---    |------N------|
 ---    |      |      |
----    X    6 H/L  8 H/L  (High Range)
----    X    2 H/L  4 H/L  (Low Range)
+---   LH    6 H/L  8 H/L  (High Range)
+---   LL    2 H/L  4 H/L  (Low Range)
 --- 
 ---This is very similar to the ZF16 shifter pattern, except for the position and amount of the reverse gears.
 ---
 ---The strategy will transform the input into 4 groups (LL, LH, HL, HH) with 4 forward and 1 reverse gear each.
+---Since the two Crawler gears (bottom left) are unuseable, this strategy can only actually produce 16 forward gears despite the name.
 ---Additionally, input will be transformed into a sequential number between -4 (RHH) and 16 (8H) for output strategies which need that.
 ---
 ---@class EatonFuller18TransformationStrategy : InputTransformationStrategy
@@ -52,8 +53,8 @@ end
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
 function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInputData)
 
-	-- Handle invalid data first
-	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6 then
+	-- Handle invalid data first (including unused crawler gears)
+	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6 or shifterInputData.currentGearSlot == 2 then
 		return GearSelectionHint.new(0, 0, self.maxEffectiveGear, 0, 0)
 	end
 
@@ -64,10 +65,11 @@ function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInput
 
 	if shifterInputData.currentGearSlot == 1 then
 		-- top left => reverse, one gear per group, and four groups, so the group equals the effective gear
+		-- we map that to one group with four gears, however
 		direction = -1
 		effectiveGear = shifterInputData.currentGroup
-		gearGroup = shifterInputData.currentGroup
-		gearInGroup = 1
+		gearGroup = 1
+		gearInGroup = shifterInputData.currentGroup
 	elseif shifterInputData.currentGearSlot > 2 and shifterInputData.currentGearSlot < 7 then
 		-- Slots 3-6 in the gear shifter => Everything between 1L and 8H (16)
 		direction = 1
@@ -87,7 +89,7 @@ function EatonFuller18TransformationStrategy:calculateEffectiveGear(shifterInput
 		-- Player has selected the neutral gear or an unsupported slot like the crawler/low gears or 7 and 8 if their shifter supports it.
 		direction = 0
 		effectiveGear = 0
-		gearGroup = 0
+		gearGroup = 1
 		gearInGroup = 0
 	end
 	return GearSelectionHint.new(direction, effectiveGear, self.maxEffectiveGear, gearGroup, gearInGroup)

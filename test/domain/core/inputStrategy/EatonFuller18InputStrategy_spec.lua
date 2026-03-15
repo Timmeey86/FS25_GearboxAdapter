@@ -7,9 +7,10 @@ describe("Eaton Fuller 18 input strategy", function()
 	it("should calculate values as expected", function()
 		-- GIVEN
 		local inputsAndExpectedOutputs = {
+			-- Note: Reverse gears should output one group with 4 gears, rather than 4 groups with 1 gear since vehicles usually only have one reverse group
 			-- low range
 			{ name = "RLL",          group = 1, slot = 1, expectedDirection = -1, expectedEffectiveGear =  1, expectedGroup = 1, expectedGearInGroup = 1 },
-			{ name = "RHL",          group = 2, slot = 1, expectedDirection = -1, expectedEffectiveGear =  2, expectedGroup = 2, expectedGearInGroup = 1 },
+			{ name = "RHL",          group = 2, slot = 1, expectedDirection = -1, expectedEffectiveGear =  2, expectedGroup = 1, expectedGearInGroup = 2 },
 			{ name = "1L",           group = 1, slot = 3, expectedDirection =  1, expectedEffectiveGear =  1, expectedGroup = 1, expectedGearInGroup = 1 },
 			{ name = "1H",           group = 2, slot = 3, expectedDirection =  1, expectedEffectiveGear =  2, expectedGroup = 2, expectedGearInGroup = 1 },
 			{ name = "2L",           group = 1, slot = 4, expectedDirection =  1, expectedEffectiveGear =  3, expectedGroup = 1, expectedGearInGroup = 2 },
@@ -19,8 +20,8 @@ describe("Eaton Fuller 18 input strategy", function()
 			{ name = "4L",           group = 1, slot = 6, expectedDirection =  1, expectedEffectiveGear =  7, expectedGroup = 1, expectedGearInGroup = 4 },
 			{ name = "4H",           group = 2, slot = 6, expectedDirection =  1, expectedEffectiveGear =  8, expectedGroup = 2, expectedGearInGroup = 4 },
 			-- high range
-			{ name = "RLH",          group = 3, slot = 1, expectedDirection = -1, expectedEffectiveGear =  3, expectedGroup = 3, expectedGearInGroup = 1 },
-			{ name = "RHH",          group = 4, slot = 1, expectedDirection = -1, expectedEffectiveGear =  4, expectedGroup = 4, expectedGearInGroup = 1 },
+			{ name = "RLH",          group = 3, slot = 1, expectedDirection = -1, expectedEffectiveGear =  3, expectedGroup = 1, expectedGearInGroup = 3 },
+			{ name = "RHH",          group = 4, slot = 1, expectedDirection = -1, expectedEffectiveGear =  4, expectedGroup = 1, expectedGearInGroup = 4 },
 			{ name = "5L",           group = 3, slot = 3, expectedDirection =  1, expectedEffectiveGear =  9, expectedGroup = 3, expectedGearInGroup = 1 },
 			{ name = "5H",           group = 4, slot = 3, expectedDirection =  1, expectedEffectiveGear = 10, expectedGroup = 4, expectedGearInGroup = 1 },
 			{ name = "6L",           group = 3, slot = 4, expectedDirection =  1, expectedEffectiveGear = 11, expectedGroup = 3, expectedGearInGroup = 2 },
@@ -34,6 +35,9 @@ describe("Eaton Fuller 18 input strategy", function()
 			{ name = "Crawler (LH)", group = 2, slot = 2, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 0, expectedGearInGroup = 0 },
 			{ name = "Crawler (HL)", group = 3, slot = 2, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 0, expectedGearInGroup = 0 },
 			{ name = "Crawler (HH)", group = 4, slot = 2, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 0, expectedGearInGroup = 0 },
+			-- neutral (only one group)
+			{ name = "Neutral (LL)",      group = 1, slot = 0, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 1, expectedGearInGroup = 0 },
+			{ name = "Neutral (HH)",      group = 4, slot = 0, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 1, expectedGearInGroup = 0 },
 			-- invalid
 			{ name = "Group 5",      group = 5, slot = 1, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 0, expectedGearInGroup = 0 },
 			{ name = "Group 0",      group = 0, slot = 1, expectedDirection =  0, expectedEffectiveGear =  0, expectedGroup = 0, expectedGearInGroup = 0 },
