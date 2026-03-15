@@ -1,4 +1,4 @@
----Uses the Eaton Fuller 13 speed transmission as a basis for the player's shifting pattern.
+---Uses the Eaton Fuller 10 speed transmission as a basis for the player's shifting pattern.
 ---This strategy assumes they have a 6-gear H shifter with a truck shifting knob which offers a splitter and a range selector.
 ---The splitter won't be used, but the range selector will be.
 ---
@@ -17,39 +17,39 @@
 ---The strategy will transform the input into 2 groups (L, H) with 5 forward and 1 reverse gears each.
 ---Additionally, input will be transformed into a sequential number between -2 (RH) and 10 for output strategies which need that.
 ---
----@class EatonFuller13TransformationStrategy : InputTransformationStrategy
+---@class EatonFuller10TransformationStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
-EatonFuller13TransformationStrategy = {}
-local EatonFuller13TransformationStrategy_mt = {
-	__metatable = setmetatable(EatonFuller13TransformationStrategy, {__index = InputTransformationStrategy}),
-	__index = EatonFuller13TransformationStrategy
+EatonFuller10TransformationStrategy = {}
+local EatonFuller10TransformationStrategy_mt = {
+	__metatable = setmetatable(EatonFuller10TransformationStrategy, {__index = InputTransformationStrategy}),
+	__index = EatonFuller10TransformationStrategy
 }
 
 ---Constructor. When creating an object, make sure to connect it with clutch event handlers
 ---@return InputTransformationStrategy @The public interface of the class
-function EatonFuller13TransformationStrategy.new()
+function EatonFuller10TransformationStrategy.new()
 
-	local self = setmetatable({}, EatonFuller13TransformationStrategy_mt)
+	local self = setmetatable({}, EatonFuller10TransformationStrategy_mt)
 	self.maxEffectiveGear = 10
 	return self
 end
 
 ---Lets the strategy know details about the current vehicle
 ---@param vehicleGearboxInfo VehicleGearboxInfo|nil @information about the vehicle's gearbox or nil if no vehicle
-function EatonFuller13TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+function EatonFuller10TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
 	-- Not required for this strategy
 end
 
 ---Lets the strategy know details about the input controller the player is using
 ---@param inputControllerInfo InputControllerInfo|nil @information about the player's input controller(s)
-function EatonFuller13TransformationStrategy:setInputControllerInfo(inputControllerInfo)
+function EatonFuller10TransformationStrategy:setInputControllerInfo(inputControllerInfo)
 	-- Not required for this strategy
 end
 
 ---Calculates the effective gear based on the player's controller input, where 0 = neutral, <0 = reverse and >0 = forward
 ---@param shifterInputData ShifterInputData @The current state of the player's controller input.
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
-function EatonFuller13TransformationStrategy:calculateEffectiveGear(shifterInputData)
+function EatonFuller10TransformationStrategy:calculateEffectiveGear(shifterInputData)
 
 	-- Handle invalid data first
 	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6 then
@@ -89,7 +89,7 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function EatonFuller13TransformationStrategy:supportsQueueingForGroups()
+function EatonFuller10TransformationStrategy:supportsQueueingForGroups()
 	-- In Eaton Fuller transmissions, the splitter or range selector can be switched at any time, and only when pressing and releasing the clutch,
 	-- the change will actually be performed.
 	return true
@@ -97,6 +97,6 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function EatonFuller13TransformationStrategy:supportsQueueingForGears()
+function EatonFuller10TransformationStrategy:supportsQueueingForGears()
 	return false
 end

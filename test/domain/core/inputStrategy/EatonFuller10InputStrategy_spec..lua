@@ -1,9 +1,9 @@
 dofile("src/domain/data/ShifterInputData.lua")
 dofile("src/domain/data/GearSelectionHint.lua")
 dofile("src/domain/core/InputTransformationStrategy.lua")
-dofile("src/domain/core/inputStrategy/EatonFuller13InputStrategy.lua")
+dofile("src/domain/core/inputStrategy/EatonFuller10InputStrategy.lua")
 
-describe("Eaton Fuller 13 input strategy", function()
+describe("Eaton Fuller 10 input strategy", function()
 	it("should calculate values as expected", function()
 		-- GIVEN
 		local inputsAndExpectedOutputs = {
@@ -43,7 +43,7 @@ describe("Eaton Fuller 13 input strategy", function()
 			return string.format("\n\nTest Case for gear %s:\n%s does not match.\nSimulated input: Group %d, Slot %d\n", testCase.name, property, testCase.group, testCase.slot)
 		end
 
-		local strategy = EatonFuller13TransformationStrategy.new()
+		local strategy = EatonFuller10TransformationStrategy.new()
 
 
 		-- WHEN / THEN

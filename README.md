@@ -10,6 +10,11 @@
 
 ![Architecture Overview](doc/ArchitectureOverview.png)
 
+## Supported shifter patterns
+Courtesy of killer2239 on [reddit](https://www.reddit.com/r/trucksim/comments/l83z5o/shift_pattern_compilation_pic/) (with their own edit in the comments):
+
+[![Shifter Patterns](https://i.imgur.com/eAvSFEH.png)](https://imgur.com/eAvSFEH)
+
 ## How to use the mod
 
 ### One-time setup for truck shifting knob + H shifter

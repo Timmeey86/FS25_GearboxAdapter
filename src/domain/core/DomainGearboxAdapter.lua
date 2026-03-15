@@ -24,7 +24,7 @@ function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 
 	self.inputStrategies = {
 		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18] = EatonFuller18TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_13] = EatonFuller13TransformationStrategy.new()
+		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_10] = EatonFuller10TransformationStrategy.new()
 	}
 	self.outputStrategies = {
 		[GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL] = SequentialOutputStrategy.new()
