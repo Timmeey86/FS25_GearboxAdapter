@@ -4,7 +4,9 @@ GearboxAdapterInterface = {
 	INPUT_STRATEGY = {
 		EATON_FULLER_18 = "eatonFuller18",
 		EATON_FULLER_13 = "eatonFuller13",
-		EATON_FULLER_10 = "eatonFuller10"
+		EATON_FULLER_10 = "eatonFuller10",
+		SCANIA_12 = "scania12",
+		VOLVO_12 = "volvo12"
 	},
 	OUTPUT_STRATEGY = {
 		SEQUENTIAL = "sequential"
