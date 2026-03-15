@@ -23,6 +23,10 @@
     <sourceFile filename="src/domain/core/OutputTransformationStrategy.lua" />
     <sourceFile filename="src/domain/core/outputStrategy/SequentialOutputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/EatonFuller18InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/EatonFuller13InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/EatonFuller10InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/Volvo12InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/Scania12InputStrategy.lua" />
     <sourceFile filename="src/domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
     <sourceFile filename="src/output/GearChangeHandler.lua" />
@@ -32,118 +36,51 @@
     <specialization name="gearInputAdapter" className="GearInputAdapterSpec" filename="src/input/GearInputAdapterSpec.lua" />
   </specializations>
   <inputBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_1">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_1" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_2">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_2" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_3">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_3" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_4">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_4" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_5">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_5" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_6">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_6" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_7">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_7" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_GROUP_STATE_8">
-      <binding device="KB_MOUSE_DEFAULT" input="KEY_KP_8" />
-    </actionBinding>
-    <actionBinding action="GA_GEAR_STATE_1" />
-    <actionBinding action="GA_GEAR_STATE_2" />
-    <actionBinding action="GA_GEAR_STATE_3" />
-    <actionBinding action="GA_GEAR_STATE_4" />
-    <actionBinding action="GA_GEAR_STATE_5" />
-    <actionBinding action="GA_GEAR_STATE_6" />
-    <actionBinding action="GA_GEAR_STATE_7" />
-    <actionBinding action="GA_GEAR_STATE_8" />
-    <actionBinding action="GA_GEAR_STATE_R" />
-    <actionBinding action="GA_GEAR_STATE_N" />
+    <!-- 1:1 group input -->
+    <actionBinding action="GA_DIRECT_GROUP_1" />
+    <actionBinding action="GA_DIRECT_GROUP_2" />
+    <actionBinding action="GA_DIRECT_GROUP_3" />
+    <actionBinding action="GA_DIRECT_GROUP_4" />
+    <actionBinding action="GA_DIRECT_GROUP_5" />
+    <actionBinding action="GA_DIRECT_GROUP_6" />
+    <actionBinding action="GA_DIRECT_GROUP_7" />
+    <actionBinding action="GA_DIRECT_GROUP_8" />
+    <!-- alternatively, group switch input where two switches control four groups, or three control 8 -->
+    <actionBinding action="GA_SWITCH_GROUP_1" />
+    <actionBinding action="GA_SWITCH_GROUP_2" />
+    <actionBinding action="GA_SWITCH_GROUP_3" />
+    <!-- 1:1 gear input -->
+    <actionBinding action="GA_DIRECT_GEAR_1" />
+    <actionBinding action="GA_DIRECT_GEAR_2" />
+    <actionBinding action="GA_DIRECT_GEAR_3" />
+    <actionBinding action="GA_DIRECT_GEAR_4" />
+    <actionBinding action="GA_DIRECT_GEAR_5" />
+    <actionBinding action="GA_DIRECT_GEAR_6" />
+    <actionBinding action="GA_DIRECT_GEAR_7" />
+    <actionBinding action="GA_DIRECT_GEAR_8" />
+    <actionBinding action="GA_DIRECT_GEAR_R" />
   </inputBinding>
   <actions>
-    <action name="GA_GEAR_GROUP_STATE_1" />
-    <action name="GA_GEAR_GROUP_STATE_2" />
-    <action name="GA_GEAR_GROUP_STATE_3" />
-    <action name="GA_GEAR_GROUP_STATE_4" />
-    <action name="GA_GEAR_GROUP_STATE_5" />
-    <action name="GA_GEAR_GROUP_STATE_6" />
-    <action name="GA_GEAR_GROUP_STATE_7" />
-    <action name="GA_GEAR_GROUP_STATE_8" />
-    <action name="GA_GEAR_STATE_1" />
-    <action name="GA_GEAR_STATE_2" />
-    <action name="GA_GEAR_STATE_3" />
-    <action name="GA_GEAR_STATE_4" />
-    <action name="GA_GEAR_STATE_5" />
-    <action name="GA_GEAR_STATE_6" />
-    <action name="GA_GEAR_STATE_7" />
-    <action name="GA_GEAR_STATE_8" />
-    <action name="GA_GEAR_STATE_R" />
-    <action name="GA_GEAR_STATE_N" />
+    <action name="GA_DIRECT_GROUP_1" />
+    <action name="GA_DIRECT_GROUP_2" />
+    <action name="GA_DIRECT_GROUP_3" />
+    <action name="GA_DIRECT_GROUP_4" />
+    <action name="GA_DIRECT_GROUP_5" />
+    <action name="GA_DIRECT_GROUP_6" />
+    <action name="GA_DIRECT_GROUP_7" />
+    <action name="GA_DIRECT_GROUP_8" />
+    <action name="GA_SWITCH_GROUP_1" />
+    <action name="GA_SWITCH_GROUP_2" />
+    <action name="GA_SWITCH_GROUP_3" />
+    <action name="GA_DIRECT_GEAR_1" />
+    <action name="GA_DIRECT_GEAR_2" />
+    <action name="GA_DIRECT_GEAR_3" />
+    <action name="GA_DIRECT_GEAR_4" />
+    <action name="GA_DIRECT_GEAR_5" />
+    <action name="GA_DIRECT_GEAR_6" />
+    <action name="GA_DIRECT_GEAR_7" />
+    <action name="GA_DIRECT_GEAR_8" />
+    <action name="GA_DIRECT_GEAR_R" />
   </actions>
-  <l10n>
-    <text name="input_GA_GEAR_GROUP_STATE_1">
-      <en>Gear Group State 1</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_2">
-      <en>Gear Group State 2</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_3">
-      <en>Gear Group State 3</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_4">
-      <en>Gear Group State 4</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_5">
-      <en>Gear Group State 5</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_6">
-      <en>Gear Group State 6</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_7">
-      <en>Gear Group State 7</en>
-    </text>
-    <text name="input_GA_GEAR_GROUP_STATE_8">
-      <en>Gear Group State 8</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_1">
-      <en>Gear State 1</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_2">
-      <en>Gear State 2</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_3">
-      <en>Gear State 3</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_4">
-      <en>Gear State 4</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_5">
-      <en>Gear State 5</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_6">
-      <en>Gear State 6</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_7">
-      <en>Gear State 7</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_8">
-      <en>Gear State 8</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_R">
-      <en>Gear State R</en>
-    </text>
-    <text name="input_GA_GEAR_STATE_N">
-      <en>Gear State N</en>
-    </text>
-    <text name="GA_WARNING_NO_REVERSE_GEARS">
-      <en>No reverse gears in this vehicle. Use the "change direction" action instead.</en>
-    </text>
-  </l10n>
+	<l10n filenamePrefix="l10n/l10n" />
 </modDesc>

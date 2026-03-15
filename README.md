@@ -2,44 +2,26 @@
 
 ## What does the mod do?
 
-- The mod allows the usage of USB Truck shifter controllers in Farming Simulator 25. It requires an AutoHotkey script to do so, however.
+- The mod allows the usage of USB Truck shifter controllers in Farming Simulator 25.
 - It allows using various realistic shifting patterns, and various gear selection strategies to be used (work in progress).
 - It also detects switching to neutral gear with a regular H shifter (only for manual transmission)
 
-## Architecture Overview
-
-![Architecture Overview](doc/ArchitectureOverview.png)
-
-## Supported shifter patterns
+## Supported shifter patterns (work in progress)
 Courtesy of killer2239 on [reddit](https://www.reddit.com/r/trucksim/comments/l83z5o/shift_pattern_compilation_pic/) (with their own edit in the comments):
+
+**Note:** At the moment, the mod is fixed to Eaton Fuller 18. Later on, the strategy can be configured in the settings
 
 [![Shifter Patterns](https://i.imgur.com/eAvSFEH.png)](https://imgur.com/eAvSFEH)
 
 ## How to use the mod
 
-### One-time setup for truck shifting knob + H shifter
+### One-time setup:
 
-The initial setup procedure is not straightforward, but it's unfortunately necessary. I'll walk you through it, you only need to do it once:
-
-1. Download and install [Autohotkey v2.0 (Ctrl+Click to open in a new tab)](https://www.autohotkey.com/) (or [build it from source if you prefer](https://github.com/AutoHotkey/AutoHotkey/tree/alpha)).  This is a program which is able to execute scripts which can amongst others capture and simulate key presses, mouse movements etc.
-1. Download both of the zip files from [the most recent release](https://github.com/Timmeey86/FS25_GearboxAdapter/releases)
-1. Extract the `GearboxAdapter_Autohotkey.zip` to anywhere where you'll find it again. (**Don't just double click. Extract it!**)
-1. Doubleclick the `ControllerTestScript.ahk` in order to run the script. You'll see a window like this: ![Controller Test Script](doc/ControllerTestScript.png)
-1. Flip the switches on your truck shifting knob in order to find out which number this controller has in your system, and remember that number (in my example, it's `3`). For "Buttons Down: ", it should always show "1" and "2".
-1. Use your H shifter and remember the number of that controller, plus the numbers of your six gears plus the reverse gear as well (in my case, it's controller `4`, buttons `13`-`18` for forward gears, and `19` for reverse).
-1. Stop the script **through the tray icon in the bottom-right of your screen (click the upwards arrow to unfold)**. Closing the window will still run the script in background. ![Autohokey Tray Icon](doc/AutoHotkeyTray.png)
-1. If your controller numbers and buttons are not identical to my numbers, right-click the `ShifterMapping.ahk` script and edit the file in a text editor [like Notepad++](https://notepad-plus-plus.org/). Otherwise skip the next two steps.
-1. In lines 4-5, where it says `3Joy2` and `3Joy1`, replace the `3` by the number of your truck shifting knob. In lines 6-12, replace the `4` by the number of your H shifter controller and replace the `13-19` by your button numbers, if necessary.
-1. Save the script and close the text editor
-1. Copy the `FS25_GearboxAdapter.zip` to your `mods` folder (by default `Documents\my games\FarmingSimulator2025\mods`). Don't extract the zip, just copy the file.
-1. Start the game, open the settings and **unbind any controller inputs currently bound to gears or gear groups**.
-1. Make sure you bind something to "Change direction", e.g. the push button on your truck shifting knob (top left in my case). Save the settings.
-1. Open your savegame, make sure to select the new Gearbox Adapter mod, load into the game, save and exit (just so you don't forget it later).
-
-### After every restart of your computer
-
-1. Double click the `ShifterMapping.ahk` script in order to run it.
-1. Start the game and load into your savegame (You can safely do this before running the script, too).
+1. Download the zip from the "Assets" section in the newest release on the [releases](https://github.com/Timmeey86/FS25_GearboxAdapter/releases) page.
+2. Go into the settings, find "Gearbox Adapter" and assign all the controls you have, leave the rest empty. When assigning switches for groups, you need to turn the switch "on" and "off" when assigning the button. The Gear group 1-8 controls are intended for people who use two H shifters (one for groups and one for gears)
+3. If you have it, bind "Switch direction" to the push button on your truck shifting knob. You will need that for vehicles which can change direction rather than having dedicated reverse gears.
+3. Remove any basegame gear/group controls you have set to the same buttons (in future, this step might not be necessary)
+4. You can now start using the advanced shifting patterns in non-CVT vehicles!
 
 ### How it works ingame
 
@@ -50,29 +32,17 @@ The initial setup procedure is not straightforward, but it's unfortunately neces
 - If the vehicle has more than 16 gears, you can currently not reach anything beyong 16
 - If the vehicle uses gear groups, your input will select the gears and gear groups sequentially, so for 3 groups with 5 gears each, 1L => 1.1, 1H => 1.2, ... , 3L => 1.5, 3H => 2.1 and so on
 
-The script is written so that it only ever sends input to Farming Simulator 25. It therefore does not matter if you exit it after quitting the game, or if you leave it running - your call.
-
 ## FAQ
 
 ### Will the mod be on Mod Hub?
 
-No, with it relying on an additional script which must be executed separately, that is unlikely.
-
-### Is the AutoHotkey script really necessary?
-
-If you are using a truck shifter knob like in the picture above, then yes, it is necessary. If you are using some kind of different setup like two H-shifters at the same time, you might be able to cope without the script
-
-### What does the script actually do?
-
-It reads the state of the buttons as configured and simulates Numpad keypresses for the groups, and Ctrl+Numpad keypressed for the gears. You can see those mappings in the Farming Simulator 25 controls screen.
-
-If you wanted to change them to different keys for some reason, note that you have to adapt both FS25 controls and the autohotkey script.
+Yes, eventually it will be.
 
 ### Why can't I reverse some machines?
 
 You are likely sitting in a machine which doesn't have backwards gears or gear groups, but instead allows the same gears in two directions. For these vehicles, you need to toggle the driving direction manually, as it is done in real life. If you are using a truck shifter knob that has a button on top of the two switches, it is recommended to bind that to the base game setting for changing directions (Space key by default).
 
-## For developers
+## For curious developers
 
 ### Detailed Architecture
 
@@ -80,7 +50,7 @@ This mod tries to increase portability between game versions using a hexagonal a
 
 - The domain package contains the main logic of transforming various abstract inputs into a gear selection based on the desired strategy. It knows nothing about Farming Simulator. Instead, it exposes an incoming interface (port) to be implemented by FS-specific classes (adapters), and performs calls on outgoing interfaces (also adapters).
 - The gear input adapter translates between specific Farming Simulator input actions and generic domain inputs.
-- The gear change adapter implements the domain core's outgoing interfaces and translates the generic actions into specific Farming Simulator commands.
+- The gear change implementation implements the domain core's outgoing interfaces and translates the generic actions into specific Farming Simulator commands.
 - The GearboxAdapter.lua is the composition root which assembles all the required objects.
 
 Some of the benefits of doing this are:

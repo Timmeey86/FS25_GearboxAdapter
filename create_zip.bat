@@ -9,8 +9,3 @@ if exist "%ZIP_FILE_PATH%" del -q "%ZIP_FILE_PATH%"
 pushd "%TEMP_FOLDER%"
 tar -a -c -f "%ZIP_FILE_PATH%" "*.*"
 popd
-
-echo Creating AHK zip file
-pushd "%~dp0\ahk"
-tar -a -c -f "%~dp0\GearboxAdapter_Autohokey.zip" "*.*"
-popd

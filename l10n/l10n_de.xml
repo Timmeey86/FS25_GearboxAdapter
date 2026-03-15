@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<l10n>
+	<translationContributors/>
+	<texts>
+		<text name="input_GA_DIRECT_GROUP_1" text="Gruppe 1 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_2" text="Gruppe 2 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_3" text="Gruppe 3 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_4" text="Gruppe 4 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_5" text="Gruppe 5 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_6" text="Gruppe 6 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_7" text="Gruppe 7 (direkt)" />
+		<text name="input_GA_DIRECT_GROUP_8" text="Gruppe 8 (direkt)" />
+		<text name="input_GA_SWITCH_GROUP_1" text="Gruppenschalter 1" />
+		<text name="input_GA_SWITCH_GROUP_2" text="Gruppenschalter 2" />
+		<text name="input_GA_SWITCH_GROUP_3" text="Gruppenschalter 3" />
+		<text name="input_GA_DIRECT_GEAR_1" text="Gang 1 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_2" text="Gang 2 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_3" text="Gang 3 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_4" text="Gang 4 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_5" text="Gang 5 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_6" text="Gang 6 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_7" text="Gang 7 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_8" text="Gang 8 (direkt)" />
+		<text name="input_GA_DIRECT_GEAR_R" text="Rückwärtsgang (direkt)" />
+	</texts>
+</l10n>

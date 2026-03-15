@@ -1,8 +1,9 @@
----This class is responsible for grabbing the configured input actions and forwarding them to the domain core.
+---This class is responsible for grabbing the configured input actions, interpreting them and forwarding them to the domain core.
 ---@class GearInputAdapterSpec
 ---@field SPEC_NAME string @The name of the specialization
 ---@field SPEC_TABLE table @The name of the specialization table
 ---@field GEARBOX_ADAPTER GearboxAdapterInterface @The domain adapter to forward input to
+---@field currentSwitchState number @The current switch state for groups in binary, where bit 0 = switch 1, bit 1 = switch 2, bit 2 = switch 3
 GearInputAdapterSpec = {
 	SPEC_NAME = g_currentModName .. ".gearInputAdapter",
 	SPEC_TABLE = "spec_" .. g_currentModName .. ".gearInputAdapter",
@@ -47,11 +48,17 @@ end
 ---@param vehicleType table @The vehicle type
 function GearInputAdapterSpec.registerFunctions(vehicleType)
 	SpecializationUtil.registerFunction(vehicleType, "getSpec", GearInputAdapterSpec.getSpec)
-	SpecializationUtil.registerFunction(vehicleType, "onGearGroupStateChanged", GearInputAdapterSpec.onGearGroupStateChanged)
-	SpecializationUtil.registerFunction(vehicleType, "onGearStateChanged", GearInputAdapterSpec.onGearStateChanged)
+	SpecializationUtil.registerFunction(vehicleType, "onDirectGroupChanged", GearInputAdapterSpec.onDirectGroupChanged)
+	SpecializationUtil.registerFunction(vehicleType, "onDirectGearChanged", GearInputAdapterSpec.onDirectGearChanged)
+	SpecializationUtil.registerFunction(vehicleType, "onSwitchForGroupChanged", GearInputAdapterSpec.onSwitchForGroupChanged)
 end
 
 function GearInputAdapterSpec:onUpdateTick(dt, _, isActiveForInputIgnoreSelection, _)
+	if self.groupSwitch1Flipped == nil then
+		self.groupSwitch1Flipped = false
+		self.groupSwitch2Flipped = false
+		self.groupSwitch3Flipped = false
+	end
 	if self.isClient then
 		if isActiveForInputIgnoreSelection then
 			GearInputAdapterSpec.updateActionEvents(self)
@@ -64,44 +71,79 @@ function GearInputAdapterSpec:onRegisterActionEvents(_, isActiveForInputIgnoreSe
 		local spec = self:getSpec()
 		self:clearActionEventsTable(spec.actionEvents)
 		if isActiveForInputIgnoreSelection then
+			local callback, actionEventId
 			for i = 1, 8 do
-				local callback = function(s) s:onGearGroupStateChanged(i) end
-				local _, actionEventId = self:addActionEvent(spec.actionEvents, "GA_GEAR_GROUP_STATE_" .. i, self, callback, false, true, false, true, nil)
+				callback = function(s) s:onDirectGroupChanged(i) end
+				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GROUP_" .. i, self, callback, true, true, false, true, nil)
 				g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 				g_inputBinding:setActionEventText(actionEventId, "")
 				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
 
-				callback = function(s) s:onGearStateChanged(i) end
-				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_GEAR_STATE_" .. i, self, callback, false, true, false, true, nil)
+				callback = function(s, _, state) s:onDirectGearChanged(i, state) end
+				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GEAR_" .. i, self, callback, true, true, false, true, nil)
 				g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 				g_inputBinding:setActionEventText(actionEventId, "")
 				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
 			end
-			-- Neutral gear
-			local callback = function(s) s:onGearStateChanged(0) end
-			local _, actionEventId = self:addActionEvent(spec.actionEvents, "GA_GEAR_STATE_N", self, callback, false, true, false, true, nil)
+
+			for i = 1, 3 do
+				callback = function(s, _, state) s:onSwitchForGroupChanged(i, state) end
+				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_SWITCH_GROUP_" .. i, self, callback, true, true, false, true, nil)
+				g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
+				g_inputBinding:setActionEventText(actionEventId, "")
+				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
+			end
+
+			-- Reverse gear
+			callback = function(s, _, state) s:onDirectGearChanged(-1, state) end
+			_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GEAR_R", self, callback, true, true, false, true, nil)
 			g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 			g_inputBinding:setActionEventText(actionEventId, "")
 			g_inputBinding:setActionEventTextVisibility(actionEventId, false)
 
-			-- Reverse gear
-			callback = function(s) s:onGearStateChanged(-1) end
-			_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_GEAR_STATE_R", self, callback, false, true, false, true, nil)
-			g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
-			g_inputBinding:setActionEventText(actionEventId, "")
-			g_inputBinding:setActionEventTextVisibility(actionEventId, false)
-			
 			GearInputAdapterSpec.updateActionEvents(self)
 		end
 	end
 end
 
-function GearInputAdapterSpec:onGearGroupStateChanged(gearGroupIndex)
+function GearInputAdapterSpec:onDirectGroupChanged(gearGroupIndex)
+	-- Use groups 1:1. We assume there is never a neutral group, but rather if the neutral gear is selected, the group does not matter
 	GearInputAdapterSpec.GEARBOX_ADAPTER:setGearGroupInput(gearGroupIndex)
 end
 
-function GearInputAdapterSpec:onGearStateChanged(gearStateIndex)
-	GearInputAdapterSpec.GEARBOX_ADAPTER:setGearInput(gearStateIndex)
+function GearInputAdapterSpec:onDirectGearChanged(gearStateIndex, state)
+	-- Always use the gear which was set, but in addition to what FS25 does, supply the neutral gear as soon as a gear gets removed
+	local inputGear = state == 1 and gearStateIndex or 0
+
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setGearInput(inputGear)
+end
+
+function GearInputAdapterSpec:onSwitchForGroupChanged(switchIndex, state)
+	local spec = self:getSpec()
+	if not spec then
+		return
+	end
+
+	-- Calculate in binary since switches can be combined (Switch 3 = MSB, Switch 1 = LSB):
+	-- Binary     Decimal    Group
+	-- 000        0          1
+	-- 001        1          2
+	-- 010        2          3
+	-- 011        3          4
+	-- 100        4          5
+	-- 101        5          6
+	-- 110        6          7
+	-- 111        7          8
+	local switchBit = 2 ^ (switchIndex - 1)
+	if state == 1 then
+		spec.currentSwitchState = bit32.bor(spec.currentSwitchState, switchBit)
+	else
+		printf("Switch state before: %s, switchBit: %s, not switchBit: %s, new state: %s", spec.currentSwitchState, switchBit, bit32.bnot(switchBit), bit32.band(spec.currentSwitchState, bit32.bnot(switchBit)))
+		spec.currentSwitchState = bit32.band(spec.currentSwitchState, bit32.bnot(switchBit))
+	end
+
+	-- The effective gear group is the switch state as a decimal number + 1 since no switch pressed means group 1
+	GearInputAdapterSpec.GEARBOX_ADAPTER:setGearGroupInput(spec.currentSwitchState + 1)
 end
 
 function GearInputAdapterSpec:onEnterVehicle()
@@ -139,14 +181,27 @@ VehicleMotor.onManualClutchChanged = Utils.appendedFunction(VehicleMotor.onManua
 function GearInputAdapterSpec:updateActionEvents()
 	local spec = self:getSpec()
 	for i = 1, 8 do
-		local actionEvent = spec.actionEvents["GA_GEAR_GROUP_STATE_" .. i]
+		local actionEvent = spec.actionEvents["GA_DIRECT_GROUP_" .. i]
 		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
 
-		actionEvent = spec.actionEvents["GA_GEAR_STATE_" .. i]
+		actionEvent = spec.actionEvents["GA_DIRECT_GEAR_" .. i]
 		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
 	end
+
+	for i = 1, 3 do
+		local actionEvent = spec.actionEvents["GA_SWITCH_GROUP_" .. i]
+		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+	end
+
+	local actionEvent = spec.actionEvents["GA_DIRECT_GEAR_R"]
+	g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
 end
 
 function GearInputAdapterSpec:getSpec()
-	return self[GearInputAdapterSpec.SPEC_TABLE]
+	local spec = self[GearInputAdapterSpec.SPEC_TABLE]
+	if spec.currentSwitchState == nil then
+		spec.currentSwitchState = 0
+		spec.currentGearState = 0
+	end
+	return spec
 end
