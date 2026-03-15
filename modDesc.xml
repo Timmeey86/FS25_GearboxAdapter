@@ -27,6 +27,8 @@
     <sourceFile filename="src/domain/core/inputStrategy/EatonFuller10InputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/Volvo12InputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/Scania12InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/ZF12InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/ZF16InputStrategy.lua" />
     <sourceFile filename="src/domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
     <sourceFile filename="src/output/GearChangeHandler.lua" />
@@ -82,5 +84,5 @@
     <action name="GA_DIRECT_GEAR_8" />
     <action name="GA_DIRECT_GEAR_R" />
   </actions>
-	<l10n filenamePrefix="l10n/l10n" />
+  <l10n filenamePrefix="l10n/l10n" />
 </modDesc>

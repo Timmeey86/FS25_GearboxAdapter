@@ -97,8 +97,7 @@ end
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
 function Scania12TransformationStrategy:supportsQueueingForGroups()
-	-- In Eaton Fuller transmissions, the splitter or range selector can be switched at any time, and only when pressing and releasing the clutch,
-	-- the change will actually be performed.
+	-- For now, support queueing in all the strategies
 	return true
 end
 

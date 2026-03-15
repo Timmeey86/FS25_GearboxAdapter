@@ -1,57 +1,63 @@
----Uses the Volvo 12+2 transmission as a basis for the player's shifting pattern.
+---Uses the ZF 16 speed transmission as a basis for the player's shifting pattern.
 ---This strategy assumes they have a 6-gear H shifter with a truck shifting knob which offers a splitter and a range selector.
----The crawler gears won't be used, so the player can effectively select 12 forward and 2 reverse gears
+---The two low gears won't be used, so the player can effectively select 16 forward and 4 reverse gears
 ---
 ---The shifting pattern is like this, where each position has a high and low splitter version, and a high and low range version,
 ---resulting in 4 possible gears per position.
 ---
----    N    4 H/L  6 H/L  (High Range)
----   C1/2  1 H/L  3 H/L  (Low Range)
+---    N    5 H/L  7 H/L  (High Range)
+---    N    1 H/L  3 H/L  (Low Range)
 ---    |      |      |
 ---    |------N------|
 ---    |      |      |
---- RHL/RHH 5 H/L    N  (High Range)
---- RLL/RLH 2 H/L    N  (Low Range)
---- ---
----The strategy will transform the input into 4 groups (LL, LH, HL, HH) with 3 forward gears each and 1 reverse gear each.
----Additionally, input will be transformed into a sequential number between2 (RH) and 12 (6H) for output strategies which need that.
+---    N    6 H/L  8 H/L  (High Range)
+---    R    2 H/L  4 H/L  (Low Range)
+--- 
+---This is very similar to the Eaton Fuller shifter pattern, except for the position and amount of the reverse gears.
 ---
----@class Volvo12TransformationStrategy : InputTransformationStrategy
+---The strategy will transform the input into 4 groups (LL, LH, HL, HH) with 4 forward and 1 reverse gear each.
+---Since the two Crawler gears (bottom left) are unuseable, this strategy can only actually produce 16 forward gears despite the name.
+---Additionally, input will be transformed into a sequential number between -4 (RHH) and 16 (8H) for output strategies which need that.
+---
+---@class ZF16TransformationStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
-Volvo12TransformationStrategy = {}
-local Volvo12TransformationStrategy_mt = {
-	__metatable = setmetatable(Volvo12TransformationStrategy, {__index = InputTransformationStrategy}),
-	__index = Volvo12TransformationStrategy
+ZF16TransformationStrategy = {}
+local ZF16TransformationStrategy_mt = {
+	__metatable = setmetatable(ZF16TransformationStrategy, {__index = InputTransformationStrategy}),
+	__index = ZF16TransformationStrategy
 }
 
 ---Constructor. When creating an object, make sure to connect it with clutch event handlers
 ---@return InputTransformationStrategy @The public interface of the class
-function Volvo12TransformationStrategy.new()
+function ZF16TransformationStrategy.new()
 
-	local self = setmetatable({}, Volvo12TransformationStrategy_mt)
-	self.maxEffectiveGear = 12
+	local self = setmetatable({}, ZF16TransformationStrategy_mt)
+	self.maxEffectiveGear = 16
 	return self
 end
 
 ---Lets the strategy know details about the current vehicle
 ---@param vehicleGearboxInfo VehicleGearboxInfo|nil @information about the vehicle's gearbox or nil if no vehicle
-function Volvo12TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+function ZF16TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
 	-- Not required for this strategy
 end
 
 ---Lets the strategy know details about the input controller the player is using
 ---@param inputControllerInfo InputControllerInfo|nil @information about the player's input controller(s)
-function Volvo12TransformationStrategy:setInputControllerInfo(inputControllerInfo)
+function ZF16TransformationStrategy:setInputControllerInfo(inputControllerInfo)
 	-- Not required for this strategy
 end
 
 ---Calculates the effective gear based on the player's controller input, where 0 = neutral, <0 = reverse and >0 = forward
 ---@param shifterInputData ShifterInputData @The current state of the player's controller input.
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
-function Volvo12TransformationStrategy:calculateEffectiveGear(shifterInputData)
+function ZF16TransformationStrategy:calculateEffectiveGear(shifterInputData)
 
-	-- Handle invalid data first (including unused slots)
-	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot == 1 or shifterInputData.currentGearSlot >= 6 then
+	-- Handle invalid data first (including unused crawler gears)
+	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6
+		or shifterInputData.currentGearSlot == 1
+		or (shifterInputData.currentGearSlot == 2 and shifterInputData.currentGroup > 2 ) then
+
 		return GearSelectionHint.new(0, 0, self.maxEffectiveGear, 0, 0)
 	end
 
@@ -61,29 +67,28 @@ function Volvo12TransformationStrategy:calculateEffectiveGear(shifterInputData)
 	local gearInGroup
 
 	if shifterInputData.currentGearSlot == 2 then
-		-- bottom left => reverse, one gear per group, and four groups, so the group equals the effective gear
-		-- we map that to one group with four gears, however
+		-- bottom left => one reverse gear in the low range. The high range has already been handled above
 		direction = -1
-		effectiveGear = shifterInputData.currentGroup
+		effectiveGear = 1
 		gearGroup = 1
-		gearInGroup = shifterInputData.currentGroup
-	elseif shifterInputData.currentGearSlot > 2 and shifterInputData.currentGearSlot < 6 then
-		-- Slots 3-5 in the gear shifter => Everything between 1L and 6H (12)
+		gearInGroup = 1
+	elseif shifterInputData.currentGearSlot > 2 and shifterInputData.currentGearSlot < 7 then
+		-- Slots 3-6 in the gear shifter => Everything between 1L and 8H (16)
 		direction = 1
 
-		-- Gear within the group: Slot 3 = 1, Slot 4 = 2, Slot 5 = 3
+		-- Gear within the group: Slot 3 = 1, Slot 4 = 2, Slot 5 = 3, Slot 6 = 4
 		local gearWithinGroup = shifterInputData.currentGearSlot - 2
 
 		-- For the effective gear, each slot represents two gears (low and high) within the same range
 		-- Therefore we multiply the slot by 2, and remove 1 if it's the L version (in either low or high range)
 		effectiveGear = gearWithinGroup * 2 - (shifterInputData.currentGroup % 2 == 0 and 0 or 1)
-		-- add +6 if the range selector is in high range
-		effectiveGear = effectiveGear + 6 * (shifterInputData.currentGroup > 2 and 1 or 0)
+		-- add +8 if the range selector is in high range
+		effectiveGear = effectiveGear + 8 * (shifterInputData.currentGroup > 2 and 1 or 0)
 
 		gearGroup = shifterInputData.currentGroup
 		gearInGroup = gearWithinGroup
 	else
-		-- Player has selected the neutral gear or an unsupported slot like the crawler/low gears or 7 and 8 if their shifter supports it.
+		-- Player has selected the neutral gear
 		direction = 0
 		effectiveGear = 0
 		gearGroup = 1
@@ -94,13 +99,14 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function Volvo12TransformationStrategy:supportsQueueingForGroups()
-	-- For now, support queueing in all the strategies
+function ZF16TransformationStrategy:supportsQueueingForGroups()
+	-- In Eaton Fuller transmissions, the splitter or range selector can be switched at any time, and only when pressing and releasing the clutch,
+	-- the change will actually be performed.
 	return true
 end
 
 ---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function Volvo12TransformationStrategy:supportsQueueingForGears()
+function ZF16TransformationStrategy:supportsQueueingForGears()
 	return false
 end

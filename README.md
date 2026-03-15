@@ -18,7 +18,7 @@ Courtesy of killer2239 on [reddit](https://www.reddit.com/r/trucksim/comments/l8
 ### One-time setup:
 
 1. Download the zip from the "Assets" section in the newest release on the [releases](https://github.com/Timmeey86/FS25_GearboxAdapter/releases) page.
-2. Go into the settings, find "Gearbox Adapter" and assign all the controls you have, leave the rest empty. When assigning switches for groups, you need to turn the switch "on" and "off" when assigning the button. The Gear group 1-8 controls are intended for people who use two H shifters (one for groups and one for gears)
+2. Go into the settings, find "Gearbox Adapter" and assign all the controls you have, leave the rest empty. When assigning switches for groups, you need to turn the switch "on" and "off" when assigning the button. The Gear group 1-8 controls are intended for people who use two H shifters (one for groups and one for gears). With a truck shifting knob + 6-gear H shifter combo, you usually only want to set "Gear Switch 1" (Splitter), "Gear Switch 2" (Range Selector), Gears 1-6 and the R gear (currently unused).
 3. If you have it, bind "Switch direction" to the push button on your truck shifting knob. You will need that for vehicles which can change direction rather than having dedicated reverse gears.
 3. Remove any basegame gear/group controls you have set to the same buttons (in future, this step might not be necessary)
 4. You can now start using the advanced shifting patterns in non-CVT vehicles!

@@ -138,7 +138,6 @@ function GearInputAdapterSpec:onSwitchForGroupChanged(switchIndex, state)
 	if state == 1 then
 		spec.currentSwitchState = bit32.bor(spec.currentSwitchState, switchBit)
 	else
-		printf("Switch state before: %s, switchBit: %s, not switchBit: %s, new state: %s", spec.currentSwitchState, switchBit, bit32.bnot(switchBit), bit32.band(spec.currentSwitchState, bit32.bnot(switchBit)))
 		spec.currentSwitchState = bit32.band(spec.currentSwitchState, bit32.bnot(switchBit))
 	end
 
@@ -200,8 +199,7 @@ end
 function GearInputAdapterSpec:getSpec()
 	local spec = self[GearInputAdapterSpec.SPEC_TABLE]
 	if spec.currentSwitchState == nil then
-		spec.currentSwitchState = 0
-		spec.currentGearState = 0
+		spec.currentSwitchState = 1
 	end
 	return spec
 end
