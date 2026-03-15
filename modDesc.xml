@@ -32,6 +32,9 @@
     <sourceFile filename="src/domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
     <sourceFile filename="src/output/GearChangeHandler.lua" />
+    <sourceFile filename="src/input/GearboxAdapterSettings.lua" />
+    <sourceFile filename="src/ui/UIHelper.lua" />
+    <sourceFile filename="src/ui/SettingsUi.lua" />
     <sourceFile filename="src/GearboxAdapter.lua" />
   </extraSourceFiles>
   <specializations>

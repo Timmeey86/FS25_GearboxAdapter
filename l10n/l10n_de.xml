@@ -22,5 +22,18 @@
 		<text name="input_GA_DIRECT_GEAR_7" text="Gang 7 (direkt)" />
 		<text name="input_GA_DIRECT_GEAR_8" text="Gang 8 (direkt)" />
 		<text name="input_GA_DIRECT_GEAR_R" text="Rückwärtsgang (direkt)" />
+		<text name="ga_sectionTitle" text="Getriebeadapter" />
+		<text name="ga_inputStrategy_long" text="Welche/s Eingabemethode/Schaltschema soll verwendet werden?" />
+		<text name="ga_inputStrategy_short" text="Eingabestrategie" />
+		<text name="ga_inputStrategy_ef18" text="Eaton Fuller 18-Gang" />
+		<text name="ga_inputStrategy_ef13" text="Eaton Fuller 13-Gang" />
+		<text name="ga_inputStrategy_ef10" text="Eaton Fuller 10-Gang" />
+		<text name="ga_inputStrategy_scania12" text="Scania 12-Gang" />
+		<text name="ga_inputStrategy_volvo12" text="Volvo 12-Gang" />
+		<text name="ga_inputStrategy_zf12" text="ZF 12-Gang" />
+		<text name="ga_inputStrategy_zf16" text="ZF 16-Gang" />
+		<text name="ga_outputStrategy_long" text="Wie sollen die Gänge in den Fahrzeugen ausgewählt werden?" />
+		<text name="ga_outputStrategy_short" text="Ausgabestrategie" />
+		<text name="ga_outputStrategy_sequential" text="Sequenziell" />
 	</texts>
 </l10n>

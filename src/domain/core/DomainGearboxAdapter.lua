@@ -45,7 +45,7 @@ function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 end
 
 ---Sets the input transformation strategy to be used.
----@param strategy string the identifier of the strategy to be used.
+---@param strategy number the index of the strategy to be used.
 function DomainGearboxAdapter:setInputTransformationStrategy(strategy)
 	if self.inputStrategies[strategy] == nil then
 		error("Strategy " .. strategy .. " not found in registered strategies")
@@ -56,7 +56,7 @@ function DomainGearboxAdapter:setInputTransformationStrategy(strategy)
 end
 
 ---Sets the output transformation strategy to be used.
----@param strategy string the identifier of the strategy to be used.
+---@param strategy number the index of the strategy to be used.
 function DomainGearboxAdapter:setOutputTransformationStrategy(strategy)
 	if self.outputStrategies[strategy] == nil then
 		error("Strategy " .. strategy .. " not found in registered strategies")

@@ -2,16 +2,16 @@
 ---@class GearboxAdapterInterface
 GearboxAdapterInterface = {
 	INPUT_STRATEGY = {
-		EATON_FULLER_18 = "eatonFuller18",
-		EATON_FULLER_13 = "eatonFuller13",
-		EATON_FULLER_10 = "eatonFuller10",
-		SCANIA_12 = "scania12",
-		VOLVO_12 = "volvo12",
-		ZF_12 = "zf12",
-		ZF_16 = "zf16"
+		EATON_FULLER_18 = 1,
+		EATON_FULLER_13 = 2,
+		EATON_FULLER_10 = 3,
+		SCANIA_12 = 4,
+		VOLVO_12 = 5,
+		ZF_12 = 6,
+		ZF_16 = 7
 	},
 	OUTPUT_STRATEGY = {
-		SEQUENTIAL = "sequential"
+		SEQUENTIAL = 1
 	}
 }
 

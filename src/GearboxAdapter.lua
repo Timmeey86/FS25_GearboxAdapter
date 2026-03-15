@@ -13,11 +13,15 @@ gearboxAdapter:setInputTransformationStrategy(GearboxAdapterInterface.INPUT_STRA
 gearboxAdapter:setOutputTransformationStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
 gearboxAdapter:setInputControllerInfo(InputControllerInfo.new(4, 6))
 
-
+local settingsUi = SettingsUi.new(gearboxAdapter)
+local settings = GearboxAdapterSettings.new()
 TypeManager.finalizeTypes = Utils.prependedFunction(TypeManager.finalizeTypes, function(typeManager)
 	if typeManager.typeName == "vehicle" then
 		-- Inject dependencies (can't do it much earlier since the spec isn't alive)
 		GearInputAdapterSpec.injectDependencies(gearboxAdapter)
+
+		-- Initialize the UI now
+		settingsUi:injectUiSettings(settings)
 
 		for typeName, typeEntry in pairs(typeManager.types) do
 			if(SpecializationUtil.hasSpecialization(Motorized, typeEntry.specializations)) then

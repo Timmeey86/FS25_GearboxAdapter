@@ -22,5 +22,18 @@
 		<text name="input_GA_DIRECT_GEAR_7" text="Gear 7 (direct)" />
 		<text name="input_GA_DIRECT_GEAR_8" text="Gear 8 (direct)" />
 		<text name="input_GA_DIRECT_GEAR_R" text="Reverse gear (direct)" />
+		<text name="ga_sectionTitle" text="Gearbox Adapter" />
+		<text name="ga_inputStrategy_long" text="Which input method/shifter pattern do you want to use?" />
+		<text name="ga_inputStrategy_short" text="Input strategy" />
+		<text name="ga_inputStrategy_ef18" text="Eaton Fuller 18-speed" />
+		<text name="ga_inputStrategy_ef13" text="Eaton Fuller 13-speed" />
+		<text name="ga_inputStrategy_ef10" text="Eaton Fuller 10-speed" />
+		<text name="ga_inputStrategy_scania12" text="Scania 12-speed" />
+		<text name="ga_inputStrategy_volvo12" text="Volvo 12-speed" />
+		<text name="ga_inputStrategy_zf12" text="ZF 12-speed" />
+		<text name="ga_inputStrategy_zf16" text="ZF 16-speed" />
+		<text name="ga_outputStrategy_long" text="How should gears be selected in the vehicles?" />
+		<text name="ga_outputStrategy_short" text="Output strategy" />
+		<text name="ga_outputStrategy_sequential" text="Sequential" />
 	</texts>
 </l10n>
