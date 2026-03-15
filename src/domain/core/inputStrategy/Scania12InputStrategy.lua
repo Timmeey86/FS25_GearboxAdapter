@@ -16,39 +16,39 @@
 ---The strategy will transform the input into 4 groups (LL, LH, HL, HH) with 3 forward gears each and 1 reverse gear each.
 ---Additionally, input will be transformed into a sequential number between2 (RH) and 12 (6H) for output strategies which need that.
 ---
----@class Scania12TransformationStrategy : InputTransformationStrategy
+---@class Scania12InputStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
-Scania12TransformationStrategy = {}
-local Scania12TransformationStrategy_mt = {
-	__metatable = setmetatable(Scania12TransformationStrategy, {__index = InputTransformationStrategy}),
-	__index = Scania12TransformationStrategy
+Scania12InputStrategy = {}
+local Scania12InputStrategy_mt = {
+	__metatable = setmetatable(Scania12InputStrategy, {__index = InputTransformationStrategy}),
+	__index = Scania12InputStrategy
 }
 
 ---Constructor. When creating an object, make sure to connect it with clutch event handlers
 ---@return InputTransformationStrategy @The public interface of the class
-function Scania12TransformationStrategy.new()
+function Scania12InputStrategy.new()
 
-	local self = setmetatable({}, Scania12TransformationStrategy_mt)
+	local self = setmetatable({}, Scania12InputStrategy_mt)
 	self.maxEffectiveGear = 12
 	return self
 end
 
 ---Lets the strategy know details about the current vehicle
 ---@param vehicleGearboxInfo VehicleGearboxInfo|nil @information about the vehicle's gearbox or nil if no vehicle
-function Scania12TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+function Scania12InputStrategy:setGearboxInfo(vehicleGearboxInfo)
 	-- Not required for this strategy
 end
 
 ---Lets the strategy know details about the input controller the player is using
 ---@param inputControllerInfo InputControllerInfo|nil @information about the player's input controller(s)
-function Scania12TransformationStrategy:setInputControllerInfo(inputControllerInfo)
+function Scania12InputStrategy:setInputControllerInfo(inputControllerInfo)
 	-- Not required for this strategy
 end
 
 ---Calculates the effective gear based on the player's controller input, where 0 = neutral, <0 = reverse and >0 = forward
 ---@param shifterInputData ShifterInputData @The current state of the player's controller input.
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
-function Scania12TransformationStrategy:calculateEffectiveGear(shifterInputData)
+function Scania12InputStrategy:calculateEffectiveGear(shifterInputData)
 
 	-- Handle invalid data first (including unused slots)
 	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6
@@ -96,13 +96,13 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function Scania12TransformationStrategy:supportsQueueingForGroups()
+function Scania12InputStrategy:supportsQueueingForGroups()
 	-- For now, support queueing in all the strategies
 	return true
 end
 
 ---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function Scania12TransformationStrategy:supportsQueueingForGears()
+function Scania12InputStrategy:supportsQueueingForGears()
 	return false
 end

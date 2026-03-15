@@ -46,7 +46,7 @@ describe("Eaton Fuller 13 input strategy", function()
 			return string.format("\n\nTest Case for gear %s:\n%s does not match.\nSimulated input: Group %d, Slot %d\n", testCase.name, property, testCase.group, testCase.slot)
 		end
 
-		local strategy = EatonFuller13TransformationStrategy.new()
+		local strategy = EatonFuller13InputStrategy.new()
 
 
 		-- WHEN / THEN

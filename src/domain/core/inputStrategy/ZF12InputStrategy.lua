@@ -16,39 +16,39 @@
 ---The strategy will transform the input into 4 groups (LL, LH, HL, HH) with 3 forward gears each and 1 reverse gear in total
 ---Additionally, input will be transformed into a sequential number between -1 (R) and 12 (6H) for output strategies which need that.
 ---
----@class ZF12TransformationStrategy : InputTransformationStrategy
+---@class ZF12InputStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
-ZF12TransformationStrategy = {}
-local ZF12TransformationStrategy_mt = {
-	__metatable = setmetatable(ZF12TransformationStrategy, {__index = InputTransformationStrategy}),
-	__index = ZF12TransformationStrategy
+ZF12InputStrategy = {}
+local ZF12InputStrategy_mt = {
+	__metatable = setmetatable(ZF12InputStrategy, {__index = InputTransformationStrategy}),
+	__index = ZF12InputStrategy
 }
 
 ---Constructor. When creating an object, make sure to connect it with clutch event handlers
 ---@return InputTransformationStrategy @The public interface of the class
-function ZF12TransformationStrategy.new()
+function ZF12InputStrategy.new()
 
-	local self = setmetatable({}, ZF12TransformationStrategy_mt)
+	local self = setmetatable({}, ZF12InputStrategy_mt)
 	self.maxEffectiveGear = 12
 	return self
 end
 
 ---Lets the strategy know details about the current vehicle
 ---@param vehicleGearboxInfo VehicleGearboxInfo|nil @information about the vehicle's gearbox or nil if no vehicle
-function ZF12TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+function ZF12InputStrategy:setGearboxInfo(vehicleGearboxInfo)
 	-- Not required for this strategy
 end
 
 ---Lets the strategy know details about the input controller the player is using
 ---@param inputControllerInfo InputControllerInfo|nil @information about the player's input controller(s)
-function ZF12TransformationStrategy:setInputControllerInfo(inputControllerInfo)
+function ZF12InputStrategy:setInputControllerInfo(inputControllerInfo)
 	-- Not required for this strategy
 end
 
 ---Calculates the effective gear based on the player's controller input, where 0 = neutral, <0 = reverse and >0 = forward
 ---@param shifterInputData ShifterInputData @The current state of the player's controller input.
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
-function ZF12TransformationStrategy:calculateEffectiveGear(shifterInputData)
+function ZF12InputStrategy:calculateEffectiveGear(shifterInputData)
 
 	-- Handle invalid data first (including unused slots)
 	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 
@@ -98,13 +98,13 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function ZF12TransformationStrategy:supportsQueueingForGroups()
+function ZF12InputStrategy:supportsQueueingForGroups()
 	-- For now, support queueing in all the strategies
 	return true
 end
 
 ---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function ZF12TransformationStrategy:supportsQueueingForGears()
+function ZF12InputStrategy:supportsQueueingForGears()
 	return false
 end

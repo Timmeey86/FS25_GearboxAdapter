@@ -52,7 +52,7 @@ describe("DomainGearboxAdapter", function()
 
 		-- WHEN
 		gearboxAdapter.inputStrategies["mock"] = mockInputStrategy
-		gearboxAdapter:setInputTransformationStrategy("mock")
+		gearboxAdapter:setInputStrategy("mock")
 
 		-- THEN
 		assert.are.equals(expectedGearboxInfo, actualGearboxInfo)
@@ -64,14 +64,14 @@ describe("DomainGearboxAdapter", function()
 		-- GIVEN
 
 		-- WHEN / THEN
-		assert.has_error(function() gearboxAdapter:setInputTransformationStrategy("does not exist") end)
+		assert.has_error(function() gearboxAdapter:setInputStrategy("does not exist") end)
 	end)
 
 	it("should error on unknown output strategies", function()
 		-- GIVEN
 
 		-- WHEN / THEN
-		assert.has_error(function() gearboxAdapter:setOutputTransformationStrategy("does not exist") end)
+		assert.has_error(function() gearboxAdapter:setOutputStrategy("does not exist") end)
 	end)
 
 	it("should allow switching output strategies", function()
@@ -80,7 +80,7 @@ describe("DomainGearboxAdapter", function()
 		gearboxAdapter.outputStrategies["mock"] = mockOutputStrategy
 
 		-- WHEN
-		gearboxAdapter:setOutputTransformationStrategy("mock")
+		gearboxAdapter:setOutputStrategy("mock")
 
 		-- THEN
 		assert.are.equals(gearboxAdapter.activeOutputStrategy, mockOutputStrategy)
@@ -475,8 +475,8 @@ describe("DomainGearboxAdapter", function()
 		local validGearboxInfo = VehicleGearboxInfo.new(false, false, false, 3, 6, 1)
 		local wasApplyChangesCalled = false
 
-		gearboxAdapter:setInputTransformationStrategy(GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18)
-		gearboxAdapter:setOutputTransformationStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
+		gearboxAdapter:setInputStrategy(GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18)
+		gearboxAdapter:setOutputStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
 		gearboxAdapter:setGearboxInfo(validGearboxInfo)
 
 		local dummyGearChangeImpl = {

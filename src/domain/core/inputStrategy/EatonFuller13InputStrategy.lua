@@ -18,39 +18,39 @@
 ---Since the L gear is unuseable, this strategy can only actually produce 12 forward gears despite the name.
 ---Additionally, input will be transformed into a sequential number between -2 (RH) and 12 for output strategies which need that.
 ---
----@class EatonFuller13TransformationStrategy : InputTransformationStrategy
+---@class EatonFuller13InputStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
-EatonFuller13TransformationStrategy = {}
-local EatonFuller13TransformationStrategy_mt = {
-	__metatable = setmetatable(EatonFuller13TransformationStrategy, {__index = InputTransformationStrategy}),
-	__index = EatonFuller13TransformationStrategy
+EatonFuller13InputStrategy = {}
+local EatonFuller13InputStrategy_mt = {
+	__metatable = setmetatable(EatonFuller13InputStrategy, {__index = InputTransformationStrategy}),
+	__index = EatonFuller13InputStrategy
 }
 
 ---Constructor. When creating an object, make sure to connect it with clutch event handlers
 ---@return InputTransformationStrategy @The public interface of the class
-function EatonFuller13TransformationStrategy.new()
+function EatonFuller13InputStrategy.new()
 
-	local self = setmetatable({}, EatonFuller13TransformationStrategy_mt)
+	local self = setmetatable({}, EatonFuller13InputStrategy_mt)
 	self.maxEffectiveGear = 13
 	return self
 end
 
 ---Lets the strategy know details about the current vehicle
 ---@param vehicleGearboxInfo VehicleGearboxInfo|nil @information about the vehicle's gearbox or nil if no vehicle
-function EatonFuller13TransformationStrategy:setGearboxInfo(vehicleGearboxInfo)
+function EatonFuller13InputStrategy:setGearboxInfo(vehicleGearboxInfo)
 	-- Not required for this strategy
 end
 
 ---Lets the strategy know details about the input controller the player is using
 ---@param inputControllerInfo InputControllerInfo|nil @information about the player's input controller(s)
-function EatonFuller13TransformationStrategy:setInputControllerInfo(inputControllerInfo)
+function EatonFuller13InputStrategy:setInputControllerInfo(inputControllerInfo)
 	-- Not required for this strategy
 end
 
 ---Calculates the effective gear based on the player's controller input, where 0 = neutral, <0 = reverse and >0 = forward
 ---@param shifterInputData ShifterInputData @The current state of the player's controller input.
 ---@return GearSelectionHint @Hints about which gear to be selected. This will be transformed again by the output strategy.
-function EatonFuller13TransformationStrategy:calculateEffectiveGear(shifterInputData)
+function EatonFuller13InputStrategy:calculateEffectiveGear(shifterInputData)
 
 	-- Handle invalid data first
 	if shifterInputData.currentGroup > 4 or shifterInputData.currentGroup < 1 or shifterInputData.currentGearSlot > 6 or shifterInputData.currentGearSlot == 2 then
@@ -101,7 +101,7 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up group changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function EatonFuller13TransformationStrategy:supportsQueueingForGroups()
+function EatonFuller13InputStrategy:supportsQueueingForGroups()
 	-- In Eaton Fuller transmissions, the splitter or range selector can be switched at any time, and only when pressing and releasing the clutch,
 	-- the change will actually be performed.
 	return true
@@ -109,6 +109,6 @@ end
 
 ---Tells the caller whether this strategy supports Queueing up gear changes until the clutch is pressed
 ---@return boolean @True if the strategy supports Queueing in general.
-function EatonFuller13TransformationStrategy:supportsQueueingForGears()
+function EatonFuller13InputStrategy:supportsQueueingForGears()
 	return false
 end

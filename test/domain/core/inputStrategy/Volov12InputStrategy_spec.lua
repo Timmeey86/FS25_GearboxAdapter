@@ -46,7 +46,7 @@ describe("Volvo 12 input strategy", function()
 			return string.format("\n\nTest Case for gear %s:\n%s does not match.\nSimulated input: Group %d, Slot %d\n", testCase.name, property, testCase.group, testCase.slot)
 		end
 
-		local strategy = Volvo12TransformationStrategy.new()
+		local strategy = Volvo12InputStrategy.new()
 
 
 		-- WHEN / THEN

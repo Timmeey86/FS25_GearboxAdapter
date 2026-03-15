@@ -23,13 +23,13 @@ function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 	local self = setmetatable({}, DomainGearboxAdapter_mt)
 
 	self.inputStrategies = {
-		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18] = EatonFuller18TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_13] = EatonFuller13TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_10] = EatonFuller10TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.SCANIA_12] = Scania12TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.VOLVO_12] = Volvo12TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_12] = ZF12TransformationStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_16] = ZF16TransformationStrategy.new()
+		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_18] = EatonFuller18InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_13] = EatonFuller13InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.EATON_FULLER_10] = EatonFuller10InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.SCANIA_12] = Scania12InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.VOLVO_12] = Volvo12InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_12] = ZF12InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_16] = ZF16InputStrategy.new()
 	}
 	self.outputStrategies = {
 		[GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL] = SequentialOutputStrategy.new()
@@ -46,7 +46,7 @@ end
 
 ---Sets the input transformation strategy to be used.
 ---@param strategy number the index of the strategy to be used.
-function DomainGearboxAdapter:setInputTransformationStrategy(strategy)
+function DomainGearboxAdapter:setInputStrategy(strategy)
 	if self.inputStrategies[strategy] == nil then
 		error("Strategy " .. strategy .. " not found in registered strategies")
 	end
@@ -57,7 +57,7 @@ end
 
 ---Sets the output transformation strategy to be used.
 ---@param strategy number the index of the strategy to be used.
-function DomainGearboxAdapter:setOutputTransformationStrategy(strategy)
+function DomainGearboxAdapter:setOutputStrategy(strategy)
 	if self.outputStrategies[strategy] == nil then
 		error("Strategy " .. strategy .. " not found in registered strategies")
 	end

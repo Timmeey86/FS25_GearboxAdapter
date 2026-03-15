@@ -6,14 +6,14 @@
 ---If the vehicle has more than one group, but the input strategy did not provide a group/gear within group suggestion, the sequential
 ---strategy will be used as a fallback.
 ---
----@class GearsAndGroupsStrategy
+---@class GearsAndGroupsOutputStrategy
 ---@field fallbackStrategy OutputTransformationStrategy The fallback strategy.
-GearsAndGroupsStrategy = {}
+GearsAndGroupsOutputStrategy = {}
 
 ---Constructor
 ---@return OutputTransformationStrategy @The public interface of the class
-function GearsAndGroupsStrategy.new()
-	local self = setmetatable({}, {__index = GearsAndGroupsStrategy})
+function GearsAndGroupsOutputStrategy.new()
+	local self = setmetatable({}, {__index = GearsAndGroupsOutputStrategy})
 	self.fallbackStrategy = SequentialOutputStrategy.new()
 	return self
 end
@@ -21,7 +21,7 @@ end
 ---@param gearSelectionHint GearSelectionHint Information about the gear the input transformation strategy has calculated.
 ---@param vehicleGearboxInfo VehicleGearboxInfo Information about the current vehicle's gearbox
 ---@return GearCalculationResult|nil @Information about the direction, group and gear to be applied to the vehicle.
-function GearsAndGroupsStrategy:calculateGearSelection(gearSelectionHint, vehicleGearboxInfo)
+function GearsAndGroupsOutputStrategy:calculateGearSelection(gearSelectionHint, vehicleGearboxInfo)
 
 	local direction
 	local outputGroup

@@ -17,14 +17,14 @@ GearboxAdapterInterface = {
 
 ---Sets the input transformation strategy to be used.
 ---@param strategy string the identifier of the strategy to be used.
-function GearboxAdapterInterface:setInputTransformationStrategy(strategy)
-	error("Method 'setInputTransformationStrategy' not defined in implementing class")
+function GearboxAdapterInterface:setInputStrategy(strategy)
+	error("Method 'setInputStrategy' not defined in implementing class")
 end
 
 ---Sets the output transformation strategy to be used.
 ---@param strategy string the identifier of the strategy to be used.
-function GearboxAdapterInterface:setOutputTransformationStrategy(strategy)
-	error("Method 'setOutputTransformationStrategy' not defined in implementing class")
+function GearboxAdapterInterface:setOutputStrategy(strategy)
+	error("Method 'setOutputStrategy' not defined in implementing class")
 end
 
 ---Forwards information about the current vehicle to the domain core

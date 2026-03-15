@@ -50,8 +50,8 @@ function SettingsUi:injectUiSettings(settings)
 	-- The _short text will be the title of the setting, the _long" text will be its tool tip
 	-- For each control, a on_<name>_changed callback will be called on change
 	local controlDefs = {
-		{ name = "inputStrategy", values = inputStrategyValues, autoBind = true },
-		{ name = "outputStrategy", values = outputStrategyValues, autoBind = true }
+		{ name = "InputTransformationStrategy", values = inputStrategyValues, autoBind = true },
+		{ name = "OutputTransformationStrategy", values = outputStrategyValues, autoBind = true }
 	}
 
 	UIHelper.createControlsDynamically(settingsPage, "ga_sectionTitle", self, controlDefs, "ga_")
@@ -65,10 +65,10 @@ function SettingsUi:onSettingsChanged(control)
 	-- Update just in case we need to disable something
 	self:updateUiElements()
 
-	if control.name == "inputStrategy" then
-		self.gearboxAdapter:setInputTransformationStrategy(self.settings.inputStrategy)
-	elseif control.name == "outputStrategy" then
-		self.gearboxAdapter:setOutputTransformationStrategy(self.settings.outputStrategy)
+	if control.name == "InputTransformationStrategy" then
+		self.gearboxAdapter:setInputStrategy(self.settings.InputTransformationStrategy)
+	elseif control.name == "OutputTransformationStrategy" then
+		self.gearboxAdapter:setOutputStrategy(self.settings.OutputTransformationStrategy)
 	end
 
 	printf("Control '%s' was changed to value '%s'", control.name, self.settings[control.name])
