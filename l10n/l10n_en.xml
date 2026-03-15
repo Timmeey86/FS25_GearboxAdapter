@@ -32,6 +32,7 @@
 		<text name="ga_inputStrategy_volvo12" text="Volvo 12-speed" />
 		<text name="ga_inputStrategy_zf12" text="ZF 12-speed" />
 		<text name="ga_inputStrategy_zf16" text="ZF 16-speed" />
+		<text name="ga_inputStrategy_gearsAndGroups" text="Gears and groups" />
 		<text name="ga_outputStrategy_long" text="How should gears be selected in the vehicles?" />
 		<text name="ga_outputStrategy_short" text="Output strategy" />
 		<text name="ga_outputStrategy_sequential" text="Sequential" />

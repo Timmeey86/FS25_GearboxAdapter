@@ -29,7 +29,8 @@ function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 		[GearboxAdapterInterface.INPUT_STRATEGY.SCANIA_12] = Scania12InputStrategy.new(),
 		[GearboxAdapterInterface.INPUT_STRATEGY.VOLVO_12] = Volvo12InputStrategy.new(),
 		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_12] = ZF12InputStrategy.new(),
-		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_16] = ZF16InputStrategy.new()
+		[GearboxAdapterInterface.INPUT_STRATEGY.ZF_16] = ZF16InputStrategy.new(),
+		[GearboxAdapterInterface.INPUT_STRATEGY.GEARS_AND_GROUPS] = GearsAndGroupsInputStrategy.new()
 	}
 	self.outputStrategies = {
 		[GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL] = SequentialOutputStrategy.new()

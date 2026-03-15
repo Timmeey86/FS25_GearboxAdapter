@@ -39,7 +39,8 @@ function SettingsUi:injectUiSettings(settings)
 		"ga_inputStrategy_scania12",
 		"ga_inputStrategy_volvo12",
 		"ga_inputStrategy_zf12",
-		"ga_inputStrategy_zf16"
+		"ga_inputStrategy_zf16",
+		"ga_inputStrategy_gearsAndGroups"
 	}
 	local outputStrategyValues = {
 		"ga_outputStrategy_sequential"

@@ -8,7 +8,8 @@ GearboxAdapterInterface = {
 		SCANIA_12 = 4,
 		VOLVO_12 = 5,
 		ZF_12 = 6,
-		ZF_16 = 7
+		ZF_16 = 7,
+		GEARS_AND_GROUPS = 8
 	},
 	OUTPUT_STRATEGY = {
 		SEQUENTIAL = 1
