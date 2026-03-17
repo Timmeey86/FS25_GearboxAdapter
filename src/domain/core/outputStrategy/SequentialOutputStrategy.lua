@@ -3,13 +3,18 @@
 ---If the vehicle has less gears than the current number, the highest gear will be selected.
 ---If the vehicle has more gears then the player can input, then the highest gears will be unreachable.
 ---
----@class SequentialOutputStrategy
+---@class SequentialOutputStrategy : OutputTransformationStrategy
 SequentialOutputStrategy = {}
+-- Define a class-like subclass metatable without relying on the FS-specific Class() function 
+local SequentialOutputStrategy_mt = {
+	__metatable = setmetatable(SequentialOutputStrategy, {__index = OutputTransformationStrategy}),
+	__index = SequentialOutputStrategy
+}
 
 ---Constructor
 ---@return OutputTransformationStrategy @The public interface of the class
 function SequentialOutputStrategy.new()
-	local self = setmetatable({}, {__index = SequentialOutputStrategy})
+	local self = setmetatable({}, SequentialOutputStrategy_mt)
 	return self
 end
 
@@ -26,12 +31,12 @@ function SequentialOutputStrategy:calculateGearSelection(gearSelectionHint, vehi
 	if gearSelectionHint.direction == 0 then
 		-- neutral gear
 		direction = 0
-		outputGroup = nil -- leave the group wherever it is
+		outputGroup = 1
 		outputGear = 0
 	elseif vehicleGearboxInfo.maxGroups <= 1 then
 		-- The vehicle has no groups => Just use the effective gear 1:1
 		direction = gearSelectionHint.direction
-		outputGroup = nil -- Do not change the group
+		outputGroup = 1
 		outputGear = gearSelectionHint.effectiveGear
 	elseif gearSelectionHint.direction > 0 then
 		-- The vehicle has more than one group, and the vehicle is moving forwards:
@@ -42,7 +47,7 @@ function SequentialOutputStrategy:calculateGearSelection(gearSelectionHint, vehi
 	else
 		-- The vehicle has more than one group, and the vehicle is moving backwards:
 		direction = -1
-		outputGroup = -1 -- assumption: Vehicles don't have more than one reverse gear group. Things like RLL, RHL etc are gears within the same group
+		outputGroup = 1 -- assumption: Vehicles don't have more than one reverse gear group. Things like RLL, RHL etc are gears within the same group
 		outputGear = gearSelectionHint.effectiveGear
 	end
 

@@ -33,7 +33,8 @@ function DomainGearboxAdapter.new(gearChangeImpl, clutchEnabledFunc)
 		[GearboxAdapterInterface.INPUT_STRATEGY.GEARS_AND_GROUPS] = GearsAndGroupsInputStrategy.new()
 	}
 	self.outputStrategies = {
-		[GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL] = SequentialOutputStrategy.new()
+		[GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL] = SequentialOutputStrategy.new(),
+		[GearboxAdapterInterface.OUTPUT_STRATEGY.GEARS_AND_GROUPS] = GearsAndGroupsOutputStrategy.new()
 	}
 	self.gearChangeImpl = gearChangeImpl
 	self.clutchEnabledFunc = clutchEnabledFunc

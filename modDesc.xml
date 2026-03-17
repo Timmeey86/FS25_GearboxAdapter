@@ -29,6 +29,7 @@
     <sourceFile filename="src/domain/core/inputStrategy/Scania12InputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/ZF12InputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/ZF16InputStrategy.lua" />
+    <sourceFile filename="src/domain/core/inputStrategy/GearsAndGroupsInputStrategy.lua" />
     <sourceFile filename="src/domain/core/DomainGearboxAdapter.lua" />
     <!--FS25 specific-->
     <sourceFile filename="src/output/GearChangeHandler.lua" />

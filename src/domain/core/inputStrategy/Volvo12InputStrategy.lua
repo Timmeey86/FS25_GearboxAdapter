@@ -19,6 +19,7 @@
 ---@class Volvo12InputStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
 Volvo12InputStrategy = {}
+-- Define a class-like subclass metatable without relying on the FS-specific Class() function
 local Volvo12InputStrategy_mt = {
 	__metatable = setmetatable(Volvo12InputStrategy, {__index = InputTransformationStrategy}),
 	__index = Volvo12InputStrategy

@@ -12,7 +12,8 @@ GearboxAdapterInterface = {
 		GEARS_AND_GROUPS = 8
 	},
 	OUTPUT_STRATEGY = {
-		SEQUENTIAL = 1
+		SEQUENTIAL = 1,
+		GEARS_AND_GROUPS = 2
 	}
 }
 

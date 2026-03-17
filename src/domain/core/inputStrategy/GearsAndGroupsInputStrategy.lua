@@ -8,6 +8,7 @@
 ---@field numGroups number @The number of groups the player's controller supports.
 ---@field numGears number @The number of gears slots the player's controller supports.
 GearsAndGroupsInputStrategy = {}
+-- Define a class-like subclass metatable without relying on the FS-specific Class() function
 local GearsAndGroupsInputStrategy_mt = {
 	__metatable = setmetatable(GearsAndGroupsInputStrategy, {__index = InputTransformationStrategy}),
 	__index = GearsAndGroupsInputStrategy

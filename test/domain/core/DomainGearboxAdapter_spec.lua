@@ -15,6 +15,7 @@ dofile("src/domain/core/inputStrategy/ZF16InputStrategy.lua")
 dofile("src/domain/core/inputStrategy/GearsAndGroupsInputStrategy.lua")
 dofile("src/domain/core/OutputTransformationStrategy.lua")
 dofile("src/domain/core/outputStrategy/SequentialOutputStrategy.lua")
+dofile("src/domain/core/outputStrategy/GearsAndGroupsOutputStrategy.lua")
 dofile("src/domain/core/DomainGearboxAdapter.lua")
 
 local mockGearChangeImpl = {

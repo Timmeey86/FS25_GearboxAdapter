@@ -36,5 +36,6 @@
 		<text name="ga_outputStrategy_long" text="Wie sollen die Gänge in den Fahrzeugen ausgewählt werden?" />
 		<text name="ga_outputStrategy_short" text="Ausgabestrategie" />
 		<text name="ga_outputStrategy_sequential" text="Sequenziell" />
+		<text name="ga_outputStrategy_gearsAndGroups" text="Gänge und Gruppen" />
 	</texts>
 </l10n>

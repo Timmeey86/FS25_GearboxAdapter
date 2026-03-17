@@ -22,6 +22,7 @@
 ---@class ZF16InputStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
 ZF16InputStrategy = {}
+-- Define a class-like subclass metatable without relying on the FS-specific Class() function
 local ZF16InputStrategy_mt = {
 	__metatable = setmetatable(ZF16InputStrategy, {__index = InputTransformationStrategy}),
 	__index = ZF16InputStrategy

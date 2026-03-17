@@ -21,6 +21,7 @@
 ---@class EatonFuller13InputStrategy : InputTransformationStrategy
 ---@field maxEffectiveGear number @The highest possible number this strategy could produce
 EatonFuller13InputStrategy = {}
+-- Define a class-like subclass metatable without relying on the FS-specific Class() function
 local EatonFuller13InputStrategy_mt = {
 	__metatable = setmetatable(EatonFuller13InputStrategy, {__index = InputTransformationStrategy}),
 	__index = EatonFuller13InputStrategy

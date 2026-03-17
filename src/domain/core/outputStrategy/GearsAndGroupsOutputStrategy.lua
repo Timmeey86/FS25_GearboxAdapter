@@ -6,14 +6,19 @@
 ---If the vehicle has more than one group, but the input strategy did not provide a group/gear within group suggestion, the sequential
 ---strategy will be used as a fallback.
 ---
----@class GearsAndGroupsOutputStrategy
+---@class GearsAndGroupsOutputStrategy : OutputTransformationStrategy
 ---@field fallbackStrategy OutputTransformationStrategy The fallback strategy.
 GearsAndGroupsOutputStrategy = {}
+-- Define a class-like subclass metatable without relying on the FS-specific Class() function 
+local GearsAndGroupsOutputStrategy_mt = {
+	__metatable = setmetatable(GearsAndGroupsOutputStrategy, {__index = OutputTransformationStrategy}),
+	__index = GearsAndGroupsOutputStrategy
+}
 
 ---Constructor
 ---@return OutputTransformationStrategy @The public interface of the class
 function GearsAndGroupsOutputStrategy.new()
-	local self = setmetatable({}, {__index = GearsAndGroupsOutputStrategy})
+	local self = setmetatable({}, GearsAndGroupsOutputStrategy_mt)
 	self.fallbackStrategy = SequentialOutputStrategy.new()
 	return self
 end
@@ -26,7 +31,6 @@ function GearsAndGroupsOutputStrategy:calculateGearSelection(gearSelectionHint, 
 	local direction
 	local outputGroup
 	local outputGear
-
 
 	if gearSelectionHint.direction == 0 then
 		-- neutral gear

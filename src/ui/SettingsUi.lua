@@ -43,7 +43,8 @@ function SettingsUi:injectUiSettings(settings)
 		"ga_inputStrategy_gearsAndGroups"
 	}
 	local outputStrategyValues = {
-		"ga_outputStrategy_sequential"
+		"ga_outputStrategy_sequential",
+		"ga_outputStrategy_gearsAndGroups"
 	}
 
 	-- Define the UI controls. For bool values, supply just the name, for ranges, supply min, max and step, and for choices, supply a values table

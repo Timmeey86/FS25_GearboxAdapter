@@ -36,5 +36,6 @@
 		<text name="ga_outputStrategy_long" text="How should gears be selected in the vehicles?" />
 		<text name="ga_outputStrategy_short" text="Output strategy" />
 		<text name="ga_outputStrategy_sequential" text="Sequential" />
+		<text name="ga_outputStrategy_gearsAndGroups" text="Gears and groups" />
 	</texts>
 </l10n>
