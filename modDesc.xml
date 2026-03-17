@@ -22,6 +22,7 @@
     <sourceFile filename="src/domain/core/InputTransformationStrategy.lua" />
     <sourceFile filename="src/domain/core/OutputTransformationStrategy.lua" />
     <sourceFile filename="src/domain/core/outputStrategy/SequentialOutputStrategy.lua" />
+    <sourceFile filename="src/domain/core/outputStrategy/GearsAndGroupsOutputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/EatonFuller18InputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/EatonFuller13InputStrategy.lua" />
     <sourceFile filename="src/domain/core/inputStrategy/EatonFuller10InputStrategy.lua" />

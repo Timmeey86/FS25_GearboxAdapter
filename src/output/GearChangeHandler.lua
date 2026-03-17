@@ -1,5 +1,5 @@
 ---This class is responsible for changing gears as requested by the domain core
----@class GearChangeHandler
+---@class GearChangeHandler : GearChangeInterface
 GearChangeHandler = {}
 
 ---Constructor

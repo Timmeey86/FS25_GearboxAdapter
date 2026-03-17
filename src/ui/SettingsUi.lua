@@ -42,35 +42,44 @@ function SettingsUi:injectUiSettings(settings)
 		"ga_inputStrategy_zf16",
 		"ga_inputStrategy_gearsAndGroups"
 	}
-	local outputStrategyValues = {
-		"ga_outputStrategy_sequential",
-		"ga_outputStrategy_gearsAndGroups"
-	}
 
 	-- Define the UI controls. For bool values, supply just the name, for ranges, supply min, max and step, and for choices, supply a values table
 	-- For every name, a <prefix>_<name>_long and _short text must exist in the l10n files
 	-- The _short text will be the title of the setting, the _long" text will be its tool tip
 	-- For each control, a on_<name>_changed callback will be called on change
 	local controlDefs = {
-		{ name = "InputTransformationStrategy", values = inputStrategyValues, autoBind = true },
-		{ name = "OutputTransformationStrategy", values = outputStrategyValues, autoBind = true }
+		{ name = "inputStrategy", values = inputStrategyValues, autoBind = true }
 	}
 
 	UIHelper.createControlsDynamically(settingsPage, "ga_sectionTitle", self, controlDefs, "ga_")
 	UIHelper.setupAutoBindControls(self, self.settings, SettingsUi.onSettingsChanged)
+
+	self.controlsByName = {}
+	for _, control in pairs(self.controls) do
+		self.controlsByName[control.name] = control
+	end
 
 	-- Apply initial values
 	self:updateUiElements()
 end
 
 function SettingsUi:onSettingsChanged(control)
+
 	-- Update just in case we need to disable something
 	self:updateUiElements()
 
-	if control.name == "InputTransformationStrategy" then
-		self.gearboxAdapter:setInputStrategy(self.settings.InputTransformationStrategy)
-	elseif control.name == "OutputTransformationStrategy" then
-		self.gearboxAdapter:setOutputStrategy(self.settings.OutputTransformationStrategy)
+	if control.name == "inputStrategy" then
+		self.gearboxAdapter:setInputStrategy(self.settings.inputStrategy)
+		-- Select a matching output strategy
+		if self.settings.inputStrategy == GearboxAdapterInterface.INPUT_STRATEGY.GEARS_AND_GROUPS then
+			self.gearboxAdapter:setOutputStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.GEARS_AND_GROUPS)
+		--elseif self.settings.inputStrategy == GearboxAdapterInterface.INPUT_STRATEGY.BEST_MATCH then
+		--	self.gearboxAdapter:setOutputStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.BEST_MATCH)
+		else
+			-- Allow selecting stretched or sequential
+			-- For now, set to sequential
+			self.gearboxAdapter:setOutputStrategy(GearboxAdapterInterface.OUTPUT_STRATEGY.SEQUENTIAL)
+		end
 	end
 
 	printf("Control '%s' was changed to value '%s'", control.name, self.settings[control.name])
@@ -81,6 +90,8 @@ function SettingsUi:updateUiElements()
 
 	-- Note: This method is created dynamically by UIHelper.setupAutoBindControls
 	self.populateAutoBindControls()
+
+	-- Allow selecting stretched or sequential unless the "best match" or "gears and groups" strategy is selected
 
 	-- Update the focus manager
 	local settingsPage = g_gui.screenControllers[InGameMenu].pageSettings
