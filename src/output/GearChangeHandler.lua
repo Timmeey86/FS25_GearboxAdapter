@@ -13,7 +13,13 @@ end
 ---@param gearCalculationResult GearCalculationResult the group and gear to be selected
 function GearChangeHandler:applyChanges(gearCalculationResult)
 
-	local spec_motorized = self:getMotorizedSpec()
+	local currentVehicle = g_localPlayer and g_localPlayer:getCurrentVehicle()
+	if not currentVehicle then
+		Logging.warning("Can't change gear/group: Player has no current vehicle")
+		return
+	end
+
+	local spec_motorized = currentVehicle.spec_motorized
 	if not spec_motorized then
 		Logging.warning("Can't change gear/group: Player's current vehicle has no motorized spec")
 		return
@@ -25,14 +31,21 @@ function GearChangeHandler:applyChanges(gearCalculationResult)
 		return
 	end
 
-	if gearCalculationResult.group and motor.gearGroups ~= nil then
-		motor:selectGroup(gearCalculationResult.group, true)
+	local gearGroup = gearCalculationResult.group
+	if gearGroup and motor.gearGroups ~= nil then
+		if currentVehicle.hasReverseGearGroup and gearCalculationResult.direction >= 0 then
+			-- Skip the first gear group, but don't exceed the maximum one
+			gearGroup = gearGroup < #motor.gearGroups and gearGroup + 1 or gearGroup
+		-- else: If there is a reverse gear group, and the vehicle is going backwards, just select the first group, which is the reverse one
+		end
+
+		motor:selectGroup(gearGroup, true)
 	-- else: don't change group
 	end
 
 	-- Change direction, unless it's a vehicle which uses forward gears in both directions
 	local newDirection = gearCalculationResult.direction >= 0 and 1 or -1
-	if not motor.directionChangeUseInverse and newDirection ~= motor.currentDirection then
+	if not motor.directionChangeUseInverse and not currentVehicle.hasReverseGearGroup and newDirection ~= motor.currentDirection then
 		motor:changeDirection(newDirection)
 	end
 

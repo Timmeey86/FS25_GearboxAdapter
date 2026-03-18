@@ -153,8 +153,25 @@ function GearInputAdapterSpec:onEnterVehicle()
 		local hasAutomaticShift = motor:getUseAutomaticGearShifting() or motor.forwardGears == nil
 		local needsClutchForGroups = not hasAutomaticShift and motor.groupType ~= VehicleMotor.TRANSMISSION_TYPE.POWERSHIFT
 		local needsClutchForGears = not hasAutomaticShift and motor.gearType ~= VehicleMotor.TRANSMISSION_TYPE.POWERSHIFT
+
 		local numForwardGears = (not hasAutomaticShift and motor.forwardGears and #motor.forwardGears) or 1
-		local numReverseGears = (not hasAutomaticShift and motor.backwardGears and #motor.backwardGears) or 0
+		local numForwardGroups = 0
+		local numReverseGears = 0
+		local hasReverseGearGroup = false
+		for _, gearGroup in ipairs(motor.gearGroups or {}) do
+			if gearGroup.ratio and gearGroup.ratio < 0 then
+				-- Special vehicle which uses a regular group for reversing
+				numReverseGears = numForwardGears
+				hasReverseGearGroup = true
+			else
+				numForwardGroups = numForwardGroups + 1
+			end
+		end
+		self.hasReverseGearGroup = hasReverseGearGroup
+
+		if numReverseGears == 0 then
+			numReverseGears = (not hasAutomaticShift and motor.backwardGears and #motor.backwardGears) or 0
+		end
 		local numGearGroups = (not hasAutomaticShift and motor.gearGroups and #motor.gearGroups) or 1
 
 		local gearboxInfo = VehicleGearboxInfo.new(hasAutomaticShift, needsClutchForGroups, needsClutchForGears, numGearGroups, numForwardGears, numReverseGears)
