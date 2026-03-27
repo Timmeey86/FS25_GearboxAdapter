@@ -8,10 +8,9 @@
 
 ## Supported shifter patterns (work in progress)
 Courtesy of killer2239 on [reddit](https://www.reddit.com/r/trucksim/comments/l83z5o/shift_pattern_compilation_pic/) (with their own edit in the comments):
-
-**Note:** At the moment, the mod is fixed to Eaton Fuller 18. Later on, the strategy can be configured in the settings
-
 [![Shifter Patterns](https://i.imgur.com/eAvSFEH.png)](https://imgur.com/eAvSFEH)
+
+Note: The selected shifter pattern is not saved, yet, so you'd have to select it each time you load into a save
 
 ## How to use the mod
 

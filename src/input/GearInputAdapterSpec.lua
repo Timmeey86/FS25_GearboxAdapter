@@ -66,21 +66,34 @@ function GearInputAdapterSpec:onUpdateTick(dt, _, isActiveForInputIgnoreSelectio
 	end
 end
 
+local errorShownForDirectGroups = false
+local errorShownForDirectGears = false
+local errorShownForSwitchGroups = false
+local errorShownForDirectGearR = false
+
 function GearInputAdapterSpec:onRegisterActionEvents(_, isActiveForInputIgnoreSelection)
 	if self.isClient then
 		local spec = self:getSpec()
 		self:clearActionEventsTable(spec.actionEvents)
 		if isActiveForInputIgnoreSelection then
-			local callback, actionEventId
+			local callback, actionEventId, success
 			for i = 1, 8 do
 				callback = function(s) s:onDirectGroupChanged(i) end
-				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GROUP_" .. i, self, callback, true, true, false, true, nil)
+				success, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GROUP_" .. i, self, callback, true, true, false, true, nil)
+				if not success and not errorShownForDirectGroups then
+					Logging.error("Failed registering an action event for direct group " .. i .. ". Shifting will not work properly")
+					errorShownForDirectGroups = true
+				end
 				g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 				g_inputBinding:setActionEventText(actionEventId, "")
 				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
 
 				callback = function(s, _, state) s:onDirectGearChanged(i, state) end
-				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GEAR_" .. i, self, callback, true, true, false, true, nil)
+				success, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GEAR_" .. i, self, callback, true, true, false, true, nil)
+				if not success and not errorShownForDirectGears then
+					Logging.error("Failed registering an action event for direct gear " .. i .. ". Shifting will not work properly")
+					errorShownForDirectGears = true
+				end
 				g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 				g_inputBinding:setActionEventText(actionEventId, "")
 				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
@@ -88,7 +101,11 @@ function GearInputAdapterSpec:onRegisterActionEvents(_, isActiveForInputIgnoreSe
 
 			for i = 1, 3 do
 				callback = function(s, _, state) s:onSwitchForGroupChanged(i, state) end
-				_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_SWITCH_GROUP_" .. i, self, callback, true, true, false, true, nil)
+				success, actionEventId = self:addActionEvent(spec.actionEvents, "GA_SWITCH_GROUP_" .. i, self, callback, true, true, false, true, nil)
+				if not success and not errorShownForSwitchGroups then
+					Logging.error("Failed registering an action event for switch group " .. i .. ". Shifting will not work properly")
+					errorShownForSwitchGroups = true
+				end
 				g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 				g_inputBinding:setActionEventText(actionEventId, "")
 				g_inputBinding:setActionEventTextVisibility(actionEventId, false)
@@ -96,7 +113,11 @@ function GearInputAdapterSpec:onRegisterActionEvents(_, isActiveForInputIgnoreSe
 
 			-- Reverse gear
 			callback = function(s, _, state) s:onDirectGearChanged(-1, state) end
-			_, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GEAR_R", self, callback, true, true, false, true, nil)
+			success, actionEventId = self:addActionEvent(spec.actionEvents, "GA_DIRECT_GEAR_R", self, callback, true, true, false, true, nil)
+			if not success and not errorShownForDirectGearR then
+				Logging.error("Failed registering an action event for reverse gear. Shifting will not work properly")
+				errorShownForDirectGearR = true
+			end
 			g_inputBinding:setActionEventTextPriority(actionEventId, GS_PRIO_VERY_LOW)
 			g_inputBinding:setActionEventText(actionEventId, "")
 			g_inputBinding:setActionEventTextVisibility(actionEventId, false)
@@ -198,19 +219,27 @@ function GearInputAdapterSpec:updateActionEvents()
 	local spec = self:getSpec()
 	for i = 1, 8 do
 		local actionEvent = spec.actionEvents["GA_DIRECT_GROUP_" .. i]
-		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+		if actionEvent then
+			g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+		end
 
 		actionEvent = spec.actionEvents["GA_DIRECT_GEAR_" .. i]
-		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+		if actionEvent then
+			g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+		end
 	end
 
 	for i = 1, 3 do
 		local actionEvent = spec.actionEvents["GA_SWITCH_GROUP_" .. i]
-		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+		if actionEvent then
+			g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+		end
 	end
 
 	local actionEvent = spec.actionEvents["GA_DIRECT_GEAR_R"]
-	g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+	if actionEvent then
+		g_inputBinding:setActionEventActive(actionEvent.actionEventId, true)
+	end
 end
 
 function GearInputAdapterSpec:getSpec()
